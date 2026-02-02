@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Psychology Flashcards 📚</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 20px;
+        }
+        
+        .progress {
+            text-align: center;
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .card-container {
+            perspective: 1000px;
+            height: 300px;
+            cursor: pointer;
+        }
+        
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+        
+        .card.flipped { transform: rotateY(180deg); }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .card-front {
+            background: white;
+        }
+        
+        .card-back {
+            background: #1a1a2e;
+            color: white;
+            transform: rotateY(180deg);
+        }
+        
+        .term {
+            font-size: 1.6em;
+            font-weight: bold;
+            text-align: center;
+            color: #333;
+        }
+        
+        .definition {
+            font-size: 1.3em;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .hint {
+            position: absolute;
+            bottom: 20px;
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        .card-back .hint { color: rgba(255,255,255,0.5); }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        
+        .btn:hover { transform: scale(1.05); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .btn-prev { background: #f0f0f0; color: #333; }
+        .btn-next { background: white; color: #333; }
+        .btn-shuffle { background: #ffd700; color: #333; }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            color: white;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-num {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .know-btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .btn-know { background: #10b981; color: white; }
+        .btn-dunno { background: #ef4444; color: white; }
+        
+        .mode-toggle {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .mode-toggle label {
+            color: white;
+            cursor: pointer;
+        }
+        
+        .mode-toggle input {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Social Psychology</h1>
+        <p class="subtitle">Chapters 1-4 Flashcards</p>
+        
+        <div class="progress">
+            Card <span id="current">1</span> of <span id="total">30</span>
+        </div>
+        
+        <div class="card-container" onclick="flipCard()">
+            <div class="card" id="card">
+                <div class="card-face card-front">
+                    <div class="term" id="term">Loading...</div>
+                    <div class="hint">Click to flip</div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="definition" id="definition">Loading...</div>
+                    <div class="hint">Click to flip back</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="know-btns">
+            <button class="btn btn-dunno" onclick="markCard(false)">❌ Still Learning</button>
+            <button class="btn btn-know" onclick="markCard(true)">✅ Got It!</button>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-prev" onclick="prevCard()">← Prev</button>
+            <button class="btn btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+            <button class="btn btn-next" onclick="nextCard()">Next →</button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-num" id="knownCount">0</div>
+                <div>Mastered</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num" id="remainingCount">30</div>
+                <div>Remaining</div>
+            </div>
+        </div>
+        
+        <div class="mode-toggle">
+            <label>
+                <input type="checkbox" id="hideKnown" onchange="updateCard()">
+                Skip mastered cards
+            </label>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+            { term: "Social Psychology", def: "The scientific study of how people's thoughts, feelings, and behaviors are influenced by others" },
+            { term: "Construal", def: "How people perceive, comprehend, and interpret the social world" },
+            { term: "Fundamental Attribution Error (FAE)", def: "Tendency to overestimate personality and underestimate situational factors when explaining others' behavior" },
+            { term: "Naïve Realism", def: "Belief that we see the world objectively while others are biased" },
+            { term: "Kurt Lewin", def: '"Father of social psychology" - Behavior = Person × Situation' },
+            { term: "Correlation", def: "A relationship between two variables (does NOT prove causation)" },
+            { term: "Independent Variable (IV)", def: "What the researcher manipulates/changes in an experiment" },
+            { term: "Dependent Variable (DV)", def: "What the researcher measures in an experiment" },
+            { term: "Internal Validity", def: "Confidence that the IV actually caused changes in the DV" },
+            { term: "External Validity", def: "Whether results can generalize to other settings/populations" },
+            { term: "Schema", def: "Mental structure that organizes knowledge about the social world" },
+            { term: "Self-fulfilling Prophecy", def: "When expectations about someone cause them to behave in confirming ways" },
+            { term: "Availability Heuristic", def: "Judging likelihood based on how easily examples come to mind" },
+            { term: "Representativeness Heuristic", def: "Judging probability based on similarity to a typical case" },
+            { term: "Anchoring and Adjustment", def: "Using an initial value as starting point and adjusting (usually not enough)" },
+            { term: "Confirmation Bias", def: "Seeking information that confirms existing beliefs" },
+            { term: "Planning Fallacy", def: "Underestimating how long tasks will take" },
+            { term: "Automatic Thinking", def: "Fast, effortless, unconscious thinking using shortcuts" },
+            { term: "Controlled Thinking", def: "Slow, effortful, conscious thinking - more accurate but draining" },
+            { term: "Internal Attribution", def: "Explaining behavior as caused by personality/character" },
+            { term: "External Attribution", def: "Explaining behavior as caused by the situation" },
+            { term: "Covariation Model (Kelley)", def: "Using consensus, distinctiveness, and consistency to make attributions" },
+            { term: "Self-Serving Bias", def: "Taking credit for successes but blaming external factors for failures" },
+            { term: "Two-Step Attribution Process", def: "1) Automatically make internal attribution 2) Adjust for situation if motivated" },
+            { term: "6 Universal Emotions", def: "Happiness, sadness, anger, fear, surprise, disgust" },
+            { term: "Actor-Observer Difference", def: "We blame others' personality but our own situations" },
+            { term: "Heuristics", def: "Mental shortcuts for quick decisions (can lead to errors)" },
+            { term: "Counterfactual Thinking", def: 'Imagining alternative outcomes - "what if..."' },
+            { term: "Overconfidence Barrier", def: "Being too certain about our judgments" },
+            { term: "Third Variable Problem", def: "When something else might be causing both correlated variables" }
+        ];
+        
+        let cards = [...flashcards];
+        let currentIndex = 0;
+        let known = new Set();
+        
+        function updateCard() {
+            const hideKnown = document.getElementById('hideKnown').checked;
+            let availableCards = hideKnown ? cards.filter((_, i) => !known.has(i)) : cards;
+            
+            if (availableCards.length === 0) {
+                document.getElementById('term').textContent = "🎉 All cards mastered!";
+                document.getElementById('definition').textContent = "Great job! Uncheck 'Skip mastered' to review all cards.";
+                return;
+            }
+            
+            // Adjust currentIndex if needed
+            if (hideKnown && known.has(currentIndex)) {
+                currentIndex = cards.findIndex((_, i) => !known.has(i));
+            }
+            
+            const card = cards[currentIndex];
+            document.getElementById('term').textContent = card.term;
+            document.getElementById('definition').textContent = card.def;
+            document.getElementById('current').textContent = currentIndex + 1;
+            document.getElementById('total').textContent = cards.length;
+            document.getElementById('knownCount').textContent = known.size;
+            document.getElementById('remainingCount').textContent = cards.length - known.size;
+            
+            // Reset flip
+            document.getElementById('card').classList.remove('flipped');
+        }
+        
+        function flipCard() {
+            document.getElementById('card').classList.toggle('flipped');
+        }
+        
+        function nextCard() {
+            const hideKnown = document.getElementById('hideKnown').checked;
+            let next = currentIndex + 1;
+            
+            if (hideKnown) {
+                while (next < cards.length && known.has(next)) next++;
+                if (next >= cards.length) {
+                    next = 0;
+                    while (next < currentIndex && known.has(next)) next++;
+                }
+            } else {
+                if (next >= cards.length) next = 0;
+            }
+            
+            currentIndex = next;
+            updateCard();
+        }
+        
+        function prevCard() {
+            const hideKnown = document.getElementById('hideKnown').checked;
+            let prev = currentIndex - 1;
+            
+            if (hideKnown) {
+                while (prev >= 0 && known.has(prev)) prev--;
+                if (prev < 0) {
+                    prev = cards.length - 1;
+                    while (prev > currentIndex && known.has(prev)) prev--;
+                }
+            } else {
+                if (prev < 0) prev = cards.length - 1;
+            }
+            
+            currentIndex = prev;
+            updateCard();
+        }
+        
+        function shuffleCards() {
+            // Fisher-Yates shuffle
+            for (let i = cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cards[i], cards[j]] = [cards[j], cards[i]];
+            }
+            // Reset known tracking since order changed
+            known.clear();
+            currentIndex = 0;
+            updateCard();
+        }
+        
+        function markCard(isKnown) {
+            if (isKnown) {
+                known.add(currentIndex);
+            } else {
+                known.delete(currentIndex);
+            }
+            nextCard();
+        }
+        
+        // Initialize
+        updateCard();
+    </script>
+</body>
+</html>
