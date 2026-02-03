@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Violence in America Flashcards 📚</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container { max-width: 600px; width: 100%; }
+        h1 { text-align: center; color: white; margin-bottom: 10px; font-size: 1.8em; }
+        .subtitle { text-align: center; color: rgba(255,255,255,0.8); margin-bottom: 20px; }
+        .progress { text-align: center; color: white; margin-bottom: 15px; font-size: 1.1em; }
+        .card-container { perspective: 1000px; height: 300px; cursor: pointer; }
+        .card { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s; }
+        .card.flipped { transform: rotateY(180deg); }
+        .card-face {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 20px; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .card-front { background: white; }
+        .card-back { background: #1a1a2e; color: white; transform: rotateY(180deg); }
+        .term { font-size: 1.5em; font-weight: bold; text-align: center; color: #333; }
+        .definition { font-size: 1.2em; text-align: center; line-height: 1.5; }
+        .hint { position: absolute; bottom: 20px; color: #999; font-size: 0.9em; }
+        .card-back .hint { color: rgba(255,255,255,0.5); }
+        .controls { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+        .btn { padding: 15px 30px; border: none; border-radius: 10px; font-size: 1.1em; cursor: pointer; transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.05); }
+        .btn-prev { background: #f0f0f0; color: #333; }
+        .btn-next { background: white; color: #333; }
+        .btn-shuffle { background: #ffd700; color: #333; }
+        .stats { display: flex; justify-content: center; gap: 30px; margin-top: 20px; color: white; }
+        .stat { text-align: center; }
+        .stat-num { font-size: 1.5em; font-weight: bold; }
+        .know-btns { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .btn-know { background: #10b981; color: white; }
+        .btn-dunno { background: #ef4444; color: white; }
+        .mode-toggle { text-align: center; margin-top: 15px; }
+        .mode-toggle label { color: white; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚠️ Violence in America</h1>
+        <p class="subtitle">Exam Study Flashcards</p>
+        <div class="progress">Card <span id="current">1</span> of <span id="total">40</span></div>
+        <div class="card-container" onclick="flipCard()">
+            <div class="card" id="card">
+                <div class="card-face card-front">
+                    <div class="term" id="term">Loading...</div>
+                    <div class="hint">Click to flip</div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="definition" id="definition">Loading...</div>
+                    <div class="hint">Click to flip back</div>
+                </div>
+            </div>
+        </div>
+        <div class="know-btns">
+            <button class="btn btn-dunno" onclick="markCard(false)">❌ Still Learning</button>
+            <button class="btn btn-know" onclick="markCard(true)">✅ Got It!</button>
+        </div>
+        <div class="controls">
+            <button class="btn btn-prev" onclick="prevCard()">← Prev</button>
+            <button class="btn btn-shuffle" onclick="shuffleCards()">🔀 Shuffle</button>
+            <button class="btn btn-next" onclick="nextCard()">Next →</button>
+        </div>
+        <div class="stats">
+            <div class="stat"><div class="stat-num" id="knownCount">0</div><div>Mastered</div></div>
+            <div class="stat"><div class="stat-num" id="remainingCount">40</div><div>Remaining</div></div>
+        </div>
+        <div class="mode-toggle">
+            <label><input type="checkbox" id="hideKnown" onchange="updateCard()"> Skip mastered cards</label>
+        </div>
+    </div>
+    <script>
+        const flashcards = [
+            { term: "Aggression", def: "A person's psychological affect, demeanor, or mindset that is physically or psychologically harmful" },
+            { term: "Violence", def: "The harmful behavior itself (distinct from aggression which is the mindset)" },
+            { term: "Justifications for Violence", def: "Most perpetrators view their acts as 'justified' or 'righteous' - in defense of an important value" },
+            { term: "WHO Definition of Violence", def: "Includes psychological aggression, deprivation, and neglect - not just physical harm" },
+            { term: "Social Distance", def: "More similar to victim = more sympathy; more similar to offender = more rationalization" },
+            { term: "Groups Most Likely to Engage in Violence", def: "Young men - regardless of time, country, or type of act" },
+            { term: "Instrumental Violence", def: "Violence as a means to an end (e.g., assault during robbery)" },
+            { term: "Expressive Violence", def: "Violence as the goal itself, expressing emotions like anger or jealousy" },
+            { term: "Phrenology", def: "Pseudoscience claiming skull shape indicated criminality - used to justify eugenics" },
+            { term: "Eugenics Movement", def: "Forced sterilization and selective breeding justified by flawed biological theories" },
+            { term: "Role of Serotonin", def: "Impulse inhibitor; low levels linked to impulsive (not calculated) violence" },
+            { term: "MAOA 'Warrior Gene'", def: "Linked to higher aggression, especially combined with childhood abuse" },
+            { term: "Role of Testosterone", def: "Linked to male violence but research mixed - environment influences levels" },
+            { term: "CTE (Brain Injuries)", def: "Violence history often shows brain abnormalities, but causation unclear" },
+            { term: "Psychopathy (ASPD)", def: "Narcissism, recklessness, no empathy/fear; linked to instrumental violence" },
+            { term: "Frustration-Aggression Hypothesis", def: "Violence when blocked from achieving a desired goal" },
+            { term: "Stress and Violence", def: "Excessive stress makes minor insults seem like major threats" },
+            { term: "Poverty and Violence", def: "Poverty is stronger predictor of violence than race" },
+            { term: "Absolute Deprivation", def: "Being poor in absolute terms" },
+            { term: "Relative Deprivation", def: "Living poor near wealthy - MORE powerful predictor than absolute poverty" },
+            { term: "Classical Strain Theory (Merton)", def: "Society emphasizes goals (wealth) but restricts means (jobs/education)" },
+            { term: "General Strain Theory (Agnew)", def: "Includes failure to achieve goals, removal of positive stimuli, presentation of negative stimuli" },
+            { term: "Merton's Five Adaptations", def: "Conformity, Ritualism, Innovation (criminal), Retreatism, Rebellion" },
+            { term: "Code of the Street", def: "Respect is currency; violence saves face and prevents future challenges" },
+            { term: "Social Learning Theory", def: "Violence learned through conditioning, reinforcement, imitation, modeling" },
+            { term: "Differential Association", def: "Associating with violence-justifiers increases likelihood of violence" },
+            { term: "Self-Control Theory", def: "Low self-control set by age 8 from ineffective child-rearing" },
+            { term: "Excusable Homicide", def: "Accidental killing without negligence" },
+            { term: "Justifiable Homicide", def: "Legally acceptable killing in defense of life" },
+            { term: "Murder", def: "Requires criminal intent and malice" },
+            { term: "1st Degree Murder", def: "Premeditated killing" },
+            { term: "2nd Degree Murder", def: "Unplanned but intentional killing" },
+            { term: "Felony Murder", def: "Death occurring during commission of a felony" },
+            { term: "Symbolic Interactionism", def: "Violence in social situations where people attach meaning and respond based on interpretations" },
+            { term: "Young Male Syndrome", def: "Hypersensitivity to social status; need to 'save face' through posture or violence" },
+            { term: "General Deterrence", def: "Death penalty to prevent OTHERS from committing crimes (evidence non-supportive)" },
+            { term: "Specific Deterrence", def: "Death penalty to prevent THAT INDIVIDUAL from reoffending" },
+            { term: "Alcohol and Violence", def: "Acts as 'intoxicant' increasing likelihood and severity of harm" },
+            { term: "NIBRS (Lantz)", def: "'Revolution' in crime stats - incident-level detail on victims, offenders, contexts" },
+            { term: "Graham & Wells (Barroom Study)", def: "Violence motivated by male honor, face-saving, group loyalty, 'fighting for fun'" }
+        ];
+        let cards = [...flashcards];
+        let currentIndex = 0;
+        let known = new Set();
+        function updateCard() {
+            const hideKnown = document.getElementById('hideKnown').checked;
+            if (hideKnown && known.has(currentIndex)) {
+                currentIndex = cards.findIndex((_, i) => !known.has(i));
+                if (currentIndex === -1) currentIndex = 0;
+            }
+            const card = cards[currentIndex];
+            document.getElementById('term').textContent = card.term;
+            document.getElementById('definition').textContent = card.def;
+            document.getElementById('current').textContent = currentIndex + 1;
+            document.getElementById('total').textContent = cards.length;
+            document.getElementById('knownCount').textContent = known.size;
+            document.getElementById('remainingCount').textContent = cards.length - known.size;
+            document.getElementById('card').classList.remove('flipped');
+        }
+        function flipCard() { document.getElementById('card').classList.toggle('flipped'); }
+        function nextCard() {
+            const hideKnown = document.getElementById('hideKnown').checked;
+            let next = currentIndex + 1;
+            if (hideKnown) { while (next < cards.length && known.has(next)) next++; if (next >= cards.length) next = 0; }
+            else { if (next >= cards.length) next = 0; }
+            currentIndex = next;
+            updateCard();
+        }
+        function prevCard() {
+            let prev = currentIndex - 1;
+            if (prev < 0) prev = cards.length - 1;
+            currentIndex = prev;
+            updateCard();
+        }
+        function shuffleCards() {
+            for (let i = cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cards[i], cards[j]] = [cards[j], cards[i]];
+            }
+            known.clear();
+            currentIndex = 0;
+            updateCard();
+        }
+        function markCard(isKnown) {
+            if (isKnown) known.add(currentIndex);
+            else known.delete(currentIndex);
+            nextCard();
+        }
+        updateCard();
+    </script>
+</body>
+</html>
