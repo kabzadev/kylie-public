@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔪 Violence in America - Exam Flashcards</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+        .container { max-width: 600px; margin: 0 auto; }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { text-align: center; color: #888; margin-bottom: 20px; }
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            height: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+            transition: width 0.3s;
+        }
+        .counter { text-align: center; margin-bottom: 15px; color: #aaa; }
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tab {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s;
+        }
+        .tab:hover, .tab.active {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        .flashcard {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            cursor: pointer;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .flashcard.flipped { transform: rotateY(180deg); }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            border-radius: 20px;
+        }
+        .card-label {
+            font-size: 0.9em;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 15px;
+        }
+        .card-term {
+            font-size: 1.6em;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+        .card-definition {
+            font-size: 1.3em;
+            line-height: 1.5;
+        }
+        .tap-hint {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.8em;
+            color: rgba(255,255,255,0.4);
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-prev { background: rgba(255,255,255,0.2); color: white; }
+        .btn-next { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: white; }
+        .btn-shuffle { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; }
+        .btn:hover { transform: scale(1.02); }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔪 Violence in America</h1>
+        <p class="subtitle">Tap card to flip • Exam 1 Review</p>
+        
+        <div class="category-tabs" id="tabs"></div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+        <div class="counter" id="counter">1 / 50</div>
+        
+        <div class="flashcard" id="flashcard" onclick="flipCard()">
+            <div class="card-face card-front">
+                <div class="card-label">TERM</div>
+                <div class="card-term" id="term">Loading...</div>
+                <div class="tap-hint">tap to reveal</div>
+            </div>
+            <div class="card-face card-back">
+                <div class="card-label">DEFINITION</div>
+                <div class="card-definition" id="definition">Loading...</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-prev" onclick="prevCard()">← Back</button>
+            <button class="btn btn-shuffle" onclick="shuffleCards()">🔀</button>
+            <button class="btn btn-next" onclick="nextCard()">Next →</button>
+        </div>
+        
+        <div class="stats">
+            <span id="seen">Seen: 0</span>
+        </div>
+    </div>
+
+    <script>
+        const allCards = {
+            "Definitions": [
+                { term: "Aggression", def: "Psychological mindset/intent that is harmful" },
+                { term: "Violence", def: "The actual harmful BEHAVIOR (distinct from aggression)" },
+                { term: "Justifications for Violence", def: "Most perpetrators view their acts as 'justified' or 'righteous'" },
+                { term: "WHO Definition of Violence", def: "Includes psychological harm, deprivation, and neglect - not just physical" },
+                { term: "Social Distance & Labeling", def: "Closer to victim = more sympathy; Closer to offender = more rationalization" },
+                { term: "Who commits violence?", def: "Young men - regardless of time, country, or type of act" },
+                { term: "Instrumental Violence", def: "Violence as a MEANS to an end (e.g., robbery)" },
+                { term: "Expressive Violence", def: "Violence IS the goal - expressing emotion like anger or jealousy" }
+            ],
+            "Bio & Psych": [
+                { term: "Phrenology", def: "Pseudoscience: skull shape = criminality (used to justify eugenics)" },
+                { term: "Eugenics Movement", def: "Forced sterilization justified by flawed biological theories" },
+                { term: "Role of Serotonin", def: "Impulse inhibitor - LOW serotonin = impulsive violence" },
+                { term: "Role of Testosterone", def: "Linked to male violence but research is MIXED" },
+                { term: "CTE (Brain Injuries)", def: "Linked to violence but causation unclear" },
+                { term: "Anti-Social Personality Disorder", def: "Narcissism, no empathy/fear → linked to INSTRUMENTAL violence" },
+                { term: "Frustration-Aggression Hypothesis", def: "Blocked from achieving goal → violence" },
+                { term: "Stress and Violence", def: "Excessive stress makes minor insults feel like major threats" }
+            ],
+            "Sociological": [
+                { term: "Poverty and Violence", def: "Poverty is a STRONGER predictor than race" },
+                { term: "Absolute Deprivation", def: "Being poor in absolute terms" },
+                { term: "Relative Deprivation", def: "Being poor NEAR the wealthy (stronger predictor!)" },
+                { term: "Classical Strain Theory (Merton)", def: "Society pushes goals (wealth) but restricts means (jobs)" },
+                { term: "Merton's 5 Adaptations", def: "Conformity, Ritualism, Innovation (crime), Retreatism, Rebellion" },
+                { term: "General Strain Theory (Agnew)", def: "Strain from: failed goals, lost positives, negative stimuli" },
+                { term: "Code of the Street", def: "In marginalized communities: respect = currency, violence saves face" },
+                { term: "Social Learning Theory", def: "Violence is learned through observation, imitation, reinforcement" },
+                { term: "Differential Association", def: "Associate with those who justify violence → more likely to do it" },
+                { term: "Self-Control Theory", def: "Low self-control (impulsive, risk-taking) set by age 8 from bad parenting" }
+            ],
+            "Homicide": [
+                { term: "Excusable Homicide", def: "Accidental killing without negligence" },
+                { term: "Justifiable Homicide", def: "Legally acceptable (self-defense)" },
+                { term: "Murder", def: "Requires criminal intent AND malice" },
+                { term: "1st Degree Murder", def: "PREMEDITATED (planned) killing" },
+                { term: "2nd Degree Murder", def: "Intentional but UNPLANNED" },
+                { term: "Felony Murder", def: "Death occurring during commission of a felony" }
+            ],
+            "Interactions": [
+                { term: "Symbolic Interactionism", def: "We signal meaning through actions; violence based on interpretations" },
+                { term: "Young Male Syndrome", def: "Hypersensitivity to social status; need to 'save face'" },
+                { term: "General Deterrence", def: "Death penalty aims to scare OTHERS (evidence: doesn't work)" },
+                { term: "Specific Deterrence", def: "Death penalty aims to stop THAT individual" },
+                { term: "Alcohol and Violence", def: "Acts as disinhibitor - increases likelihood AND severity" }
+            ],
+            "Readings": [
+                { term: "Lantz - Main Point", def: "Importance of researching violence in US; structural conditions lead to violence" },
+                { term: "Lantz - NIBRS", def: "Better crime data - provides incident-level detail on victims, offenders, contexts" },
+                { term: "Agnew - General Strain", def: "Three sources: failed goals, lost positives, negative stimuli" },
+                { term: "Agnew - Coping", def: "People respond to strain differently - not everyone becomes violent" },
+                { term: "Graham & Wells - Topic", def: "Qualitative study of barroom violence" },
+                { term: "Graham & Wells - Motivations", def: "Male honor, face-saving, group loyalty, 'fighting for fun'" }
+            ]
+        };
+
+        let currentCategory = 'All';
+        let cards = [];
+        let currentIndex = 0;
+        let seen = new Set();
+
+        function initTabs() {
+            const tabs = document.getElementById('tabs');
+            tabs.innerHTML = '<button class="tab active" onclick="setCategory(\'All\')">All</button>';
+            Object.keys(allCards).forEach(cat => {
+                tabs.innerHTML += `<button class="tab" onclick="setCategory('${cat}')">${cat}</button>`;
+            });
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            loadCards();
+        }
+
+        function loadCards() {
+            if (currentCategory === 'All') {
+                cards = Object.values(allCards).flat();
+            } else {
+                cards = [...allCards[currentCategory]];
+            }
+            currentIndex = 0;
+            seen.clear();
+            showCard();
+        }
+
+        function showCard() {
+            const card = cards[currentIndex];
+            document.getElementById('term').textContent = card.term;
+            document.getElementById('definition').textContent = card.def;
+            document.getElementById('flashcard').classList.remove('flipped');
+            document.getElementById('counter').textContent = `${currentIndex + 1} / ${cards.length}`;
+            document.getElementById('progress').style.width = `${((currentIndex + 1) / cards.length) * 100}%`;
+            seen.add(currentIndex);
+            document.getElementById('seen').textContent = `Seen: ${seen.size}`;
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % cards.length;
+            showCard();
+        }
+
+        function prevCard() {
+            currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+            showCard();
+        }
+
+        function shuffleCards() {
+            for (let i = cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cards[i], cards[j]] = [cards[j], cards[i]];
+            }
+            currentIndex = 0;
+            seen.clear();
+            showCard();
+        }
+
+        initTabs();
+        loadCards();
+    </script>
+</body>
+</html>

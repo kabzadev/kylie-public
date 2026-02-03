@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔪 Violence Exam Crusher</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+        .container { max-width: 700px; margin: 0 auto; }
+        h1 {
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { text-align: center; color: #888; margin-bottom: 25px; }
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .stat { text-align: center; }
+        .stat-value { font-size: 1.8em; font-weight: bold; }
+        .stat-label { font-size: 0.85em; color: #aaa; }
+        .score { color: #4ade80; }
+        .streak { color: #fbbf24; }
+        .progress-stat { color: #60a5fa; }
+        .question-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .question-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+        .question-text {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .answers { display: flex; flex-direction: column; gap: 10px; }
+        .answer-btn {
+            padding: 16px 18px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-size: 1.05em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        .answer-btn:hover:not(.disabled) {
+            border-color: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+        }
+        .answer-btn.correct {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            border-color: #4ade80;
+        }
+        .answer-btn.wrong {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            border-color: #f87171;
+        }
+        .answer-btn.disabled { cursor: default; opacity: 0.7; }
+        .feedback {
+            text-align: center;
+            font-size: 1.5em;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            animation: pop 0.3s ease;
+        }
+        @keyframes pop {
+            0% { transform: scale(0.8); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .feedback.correct { background: linear-gradient(135deg, #4ade80, #22c55e); }
+        .feedback.wrong { background: linear-gradient(135deg, #f87171, #ef4444); }
+        .next-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .results { text-align: center; padding: 40px 20px; }
+        .results h2 { font-size: 2.2em; margin-bottom: 20px; }
+        .final-score {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #4ade80, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .grade { font-size: 1.8em; margin: 20px 0; }
+        .play-again {
+            padding: 18px 40px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+        }
+        .hidden { display: none; }
+        .review-section { text-align: left; margin-top: 25px; }
+        .review-item {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+        .review-item strong { color: #f87171; }
+        .review-item .correct-ans { color: #4ade80; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔪 EXAM CRUSHER</h1>
+        <p class="subtitle">Violence in America - Exam 1</p>
+        
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-value score" id="score">0</div>
+                <div class="stat-label">Score</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value streak" id="streak">🔥 0</div>
+                <div class="stat-label">Streak</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value progress-stat" id="progress">0/25</div>
+                <div class="stat-label">Progress</div>
+            </div>
+        </div>
+        
+        <div id="game-area">
+            <div class="question-card">
+                <span class="question-tag" id="tag">Definitions</span>
+                <div class="question-text" id="question">Loading...</div>
+                <div class="answers" id="answers"></div>
+                <div class="feedback hidden" id="feedback"></div>
+                <button class="next-btn hidden" id="next-btn" onclick="nextQuestion()">Next →</button>
+            </div>
+        </div>
+        
+        <div id="results" class="results hidden">
+            <h2>🎉 Complete!</h2>
+            <div class="final-score" id="final-score">0%</div>
+            <div class="grade" id="grade"></div>
+            <div id="review" class="review-section"></div>
+            <button class="play-again" onclick="restartGame()">Play Again 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Definitions
+            { cat: "Definitions", q: "Aggression is the ___, violence is the ___", a: "Mindset; behavior", wrong: ["Behavior; mindset", "Same thing", "Action; thought"] },
+            { cat: "Definitions", q: "Most perpetrators view their violence as...", a: "Justified or righteous", wrong: ["Completely wrong", "Accidental", "Necessary evil"] },
+            { cat: "Definitions", q: "WHO definition of violence includes...", a: "Psychological harm, neglect, deprivation", wrong: ["Only physical harm", "Only death", "Only injury"] },
+            { cat: "Definitions", q: "Social distance affects how we...", a: "Label and perceive violence", wrong: ["Commit violence", "Prevent violence", "Forget violence"] },
+            { cat: "Definitions", q: "Which group commits the most violence?", a: "Young men", wrong: ["Elderly men", "Young women", "Middle-aged adults"] },
+            { cat: "Definitions", q: "Instrumental violence is violence to...", a: "Achieve a goal", wrong: ["Express emotion", "Defend yourself", "Get attention"] },
+            { cat: "Definitions", q: "Expressive violence comes from...", a: "Emotions like anger", wrong: ["Careful planning", "Financial need", "Self-defense"] },
+            
+            // Bio & Psych
+            { cat: "Bio/Psych", q: "Phrenology was used to justify...", a: "Eugenics", wrong: ["Democracy", "Education", "Healthcare"] },
+            { cat: "Bio/Psych", q: "LOW serotonin is linked to...", a: "Impulsive violence", wrong: ["Calculated violence", "No violence", "Better control"] },
+            { cat: "Bio/Psych", q: "Research on testosterone and violence is...", a: "Mixed/inconclusive", wrong: ["Definitive", "Nonexistent", "Proven false"] },
+            { cat: "Bio/Psych", q: "Psychopathy is linked to which type of violence?", a: "Instrumental", wrong: ["Expressive", "Accidental", "Justified"] },
+            { cat: "Bio/Psych", q: "Frustration-Aggression: blocked goals cause...", a: "Aggression/violence", wrong: ["Acceptance", "Happiness", "Relaxation"] },
+            { cat: "Bio/Psych", q: "Excessive stress makes minor insults feel...", a: "Like major threats", wrong: ["Unimportant", "Funny", "Forgettable"] },
+            
+            // Sociological
+            { cat: "Sociological", q: "Which is a stronger predictor of violence?", a: "Poverty", wrong: ["Race", "Religion", "Gender"] },
+            { cat: "Sociological", q: "Relative deprivation means being poor...", a: "Near the wealthy", wrong: ["Everywhere", "Alone", "In absolute terms"] },
+            { cat: "Sociological", q: "Which deprivation better predicts violence?", a: "Relative", wrong: ["Absolute", "Neither", "Both equal"] },
+            { cat: "Sociological", q: "Merton's Strain Theory: society pushes ___ but blocks ___", a: "Goals; means", wrong: ["Means; goals", "Crime; punishment", "Violence; peace"] },
+            { cat: "Sociological", q: "Merton's adaptation using crime to achieve goals:", a: "Innovation", wrong: ["Conformity", "Ritualism", "Retreatism"] },
+            { cat: "Sociological", q: "Code of the Street: respect is like...", a: "Currency", wrong: ["Nothing", "A joke", "Optional"] },
+            { cat: "Sociological", q: "Social Learning Theory: violence is...", a: "Learned through observation", wrong: ["Purely genetic", "Random", "Instinctual only"] },
+            { cat: "Sociological", q: "Self-Control Theory: low self-control set by age...", a: "8", wrong: ["18", "25", "40"] },
+            
+            // Homicide
+            { cat: "Homicide", q: "1st Degree Murder requires...", a: "Premeditation", wrong: ["Accident", "Self-defense", "Passion"] },
+            { cat: "Homicide", q: "2nd Degree Murder is...", a: "Intentional but unplanned", wrong: ["Premeditated", "Accidental", "Justified"] },
+            { cat: "Homicide", q: "Felony Murder: death during a...", a: "Felony crime", wrong: ["Misdemeanor", "Self-defense", "Accident"] },
+            { cat: "Homicide", q: "Excusable homicide is...", a: "Accidental without negligence", wrong: ["Premeditated", "Intentional", "Illegal"] },
+            
+            // Interactions
+            { cat: "Interactions", q: "Young Male Syndrome involves sensitivity to...", a: "Social status/saving face", wrong: ["Physical pain", "Weather", "Food"] },
+            { cat: "Interactions", q: "General Deterrence aims to scare...", a: "Others from committing crimes", wrong: ["That specific person", "No one", "Victims"] },
+            { cat: "Interactions", q: "Evidence shows death penalty as general deterrent...", a: "Doesn't work", wrong: ["Works perfectly", "Works sometimes", "Is the best method"] },
+            { cat: "Interactions", q: "Alcohol acts as a...", a: "Disinhibitor", wrong: ["Calming agent", "Violence reducer", "Inhibitor"] },
+            { cat: "Interactions", q: "Symbolic Interactionism: violence based on...", a: "Interpretations of situations", wrong: ["Random chance", "Genetics only", "Nothing"] },
+            
+            // Readings
+            { cat: "Readings", q: "Lantz argues violence is caused by...", a: "Structural conditions", wrong: ["Individual choice only", "Random factors", "Weather"] },
+            { cat: "Readings", q: "NIBRS provides what kind of crime data?", a: "Incident-level detail", wrong: ["Only totals", "No detail", "Only murder"] },
+            { cat: "Readings", q: "Agnew's General Strain: strain from...", a: "Failed goals, lost positives, negative stimuli", wrong: ["Only poverty", "Only abuse", "Only genetics"] },
+            { cat: "Readings", q: "Graham & Wells studied violence in...", a: "Bars/barrooms", wrong: ["Schools", "Homes", "Workplaces"] },
+            { cat: "Readings", q: "Graham & Wells: barroom violence motivated by...", a: "Male honor, face-saving, group loyalty", wrong: ["Only money", "Only self-defense", "Only accidents"] }
+        ];
+
+        let gameQuestions = [];
+        let currentQuestion = 0;
+        let score = 0;
+        let streak = 0;
+        let answered = false;
+        let wrongAnswers = [];
+
+        const correctMsgs = ["🔥 YES!", "💪 Nailed it!", "⭐ Perfect!", "🧠 Big brain!", "👑 Queen!", "✨ Slay!"];
+        const wrongMsgs = ["😅 Oops!", "🤔 Close!", "📚 Review this!"];
+
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function startGame() {
+            gameQuestions = shuffle([...questions]).slice(0, 25);
+            currentQuestion = 0;
+            score = 0;
+            streak = 0;
+            wrongAnswers = [];
+            answered = false;
+            document.getElementById('score').textContent = '0';
+            document.getElementById('streak').textContent = '🔥 0';
+            document.getElementById('game-area').classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = gameQuestions[currentQuestion];
+            document.getElementById('tag').textContent = q.cat;
+            document.getElementById('question').textContent = q.q;
+            
+            const answers = shuffle([q.a, ...q.wrong]);
+            document.getElementById('answers').innerHTML = answers.map(ans =>
+                `<button class="answer-btn" onclick="checkAnswer(this, '${ans.replace(/'/g, "\\'")}', '${q.a.replace(/'/g, "\\'")}')">${ans}</button>`
+            ).join('');
+            
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            document.getElementById('progress').textContent = `${currentQuestion + 1}/25`;
+            answered = false;
+        }
+
+        function checkAnswer(btn, selected, correct) {
+            if (answered) return;
+            answered = true;
+            
+            document.querySelectorAll('.answer-btn').forEach(b => {
+                b.classList.add('disabled');
+                if (b.textContent === correct) b.classList.add('correct');
+            });
+            
+            const feedback = document.getElementById('feedback');
+            feedback.classList.remove('hidden');
+            
+            if (selected === correct) {
+                btn.classList.add('correct');
+                score += 10 + streak * 2;
+                streak++;
+                feedback.textContent = correctMsgs[Math.floor(Math.random() * correctMsgs.length)];
+                feedback.className = 'feedback correct';
+            } else {
+                btn.classList.add('wrong');
+                streak = 0;
+                feedback.textContent = wrongMsgs[Math.floor(Math.random() * wrongMsgs.length)] + ` → ${correct}`;
+                feedback.className = 'feedback wrong';
+                wrongAnswers.push(gameQuestions[currentQuestion]);
+            }
+            
+            document.getElementById('score').textContent = score;
+            document.getElementById('streak').textContent = `🔥 ${streak}`;
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion >= gameQuestions.length) {
+                showResults();
+            } else {
+                showQuestion();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('game-area').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+            
+            const pct = Math.round((25 - wrongAnswers.length) / 25 * 100);
+            document.getElementById('final-score').textContent = pct + '%';
+            
+            let grade = pct >= 90 ? 'A 🏆' : pct >= 80 ? 'B ⭐' : pct >= 70 ? 'C 👍' : pct >= 60 ? 'D 📚' : 'Keep studying! 💪';
+            document.getElementById('grade').textContent = grade;
+            
+            if (wrongAnswers.length > 0) {
+                document.getElementById('review').innerHTML = '<h3 style="color:#f87171;margin-bottom:10px;">Review These:</h3>' +
+                    wrongAnswers.map(q => `<div class="review-item"><strong>${q.q}</strong><br><span class="correct-ans">→ ${q.a}</span></div>`).join('');
+            } else {
+                document.getElementById('review').innerHTML = '<p style="color:#4ade80;font-size:1.2em;">Perfect score! You\'re ready! 🎉</p>';
+            }
+        }
+
+        function restartGame() { startGame(); }
+        startGame();
+    </script>
+</body>
+</html>
