@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Psychology Matching Game 🧠</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: white; margin-bottom: 10px; font-size: 2em; }
+        .subtitle { text-align: center; color: rgba(255,255,255,0.8); margin-bottom: 20px; }
+        .stats {
+            display: flex; justify-content: center; gap: 40px;
+            margin-bottom: 20px; color: white; font-size: 1.2em;
+        }
+        .game-area {
+            display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+        }
+        .column {
+            display: flex; flex-direction: column; gap: 10px; min-width: 300px;
+        }
+        .column-title {
+            text-align: center; color: white; font-weight: bold;
+            margin-bottom: 10px; font-size: 1.2em;
+        }
+        .card {
+            padding: 15px 20px; background: white; border-radius: 12px;
+            cursor: pointer; transition: all 0.2s; font-size: 1em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 3px solid transparent;
+            min-height: 60px; display: flex; align-items: center; justify-content: center;
+            text-align: center;
+        }
+        .card:hover { transform: scale(1.02); }
+        .card.selected { border-color: #ffd700; background: #fff9e6; }
+        .card.matched {
+            background: #d1fae5; border-color: #10b981;
+            cursor: default; opacity: 0.8;
+        }
+        .card.wrong {
+            animation: shake 0.5s; border-color: #ef4444; background: #fee2e2;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .message {
+            text-align: center; padding: 20px; margin-top: 20px;
+            background: white; border-radius: 12px; font-size: 1.3em;
+            display: none;
+        }
+        .message.show { display: block; }
+        .btn {
+            display: block; margin: 20px auto; padding: 15px 40px;
+            background: #ffd700; border: none; border-radius: 10px;
+            font-size: 1.2em; cursor: pointer; font-weight: bold;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .instructions {
+            text-align: center; color: rgba(255,255,255,0.9);
+            margin-bottom: 20px; font-size: 1.1em;
+        }
+        .round-indicator {
+            text-align: center; color: white; margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 Social Psychology</h1>
+        <p class="subtitle">Matching Game</p>
+        
+        <div class="stats">
+            <span>✅ Matched: <span id="matched">0</span>/8</span>
+            <span>⏱️ Time: <span id="timer">0</span>s</span>
+            <span>🎯 Score: <span id="score">0</span></span>
+        </div>
+        
+        <div class="round-indicator">Round <span id="round">1</span> of 5</div>
+        
+        <p class="instructions">Click a term, then click its matching definition!</p>
+        
+        <div class="game-area">
+            <div class="column">
+                <div class="column-title">📝 TERMS</div>
+                <div id="terms"></div>
+            </div>
+            <div class="column">
+                <div class="column-title">💡 DEFINITIONS</div>
+                <div id="definitions"></div>
+            </div>
+        </div>
+        
+        <div class="message" id="message"></div>
+        <button class="btn" id="nextBtn" style="display:none;" onclick="nextRound()">Next Round →</button>
+        <button class="btn" id="playAgainBtn" style="display:none;" onclick="startGame()">Play Again 🔄</button>
+    </div>
+
+    <script>
+        const allPairs = [
+            { term: "FAE", def: "Blame personality, forget situation" },
+            { term: "Construal", def: "Personal interpretation" },
+            { term: "Schema", def: "Mental folder" },
+            { term: "Heuristic", def: "Mental shortcut" },
+            { term: "Availability", def: "Easy to recall = seems common" },
+            { term: "Representativeness", def: "Looks like stereotype" },
+            { term: "Anchoring", def: "First number sticks" },
+            { term: "Self-serving bias", def: "Win=me, Lose=unfair" },
+            { term: "Internal attribution", def: "Blame personality" },
+            { term: "External attribution", def: "Blame situation" },
+            { term: "Naïve realism", def: "I'm objective, others biased" },
+            { term: "Self-fulfilling prophecy", def: "Expect it → happens" },
+            { term: "Planning fallacy", def: "Underestimate time" },
+            { term: "Confirmation bias", def: "Seek info that agrees" },
+            { term: "IV (Independent Variable)", def: "What you change" },
+            { term: "DV (Dependent Variable)", def: "What you measure" },
+            { term: "Correlation", def: "Relationship (not causation!)" },
+            { term: "Internal validity", def: "Did IV cause DV?" },
+            { term: "External validity", def: "Works in real world?" },
+            { term: "Kurt Lewin", def: "Father of social psychology" },
+            { term: "Automatic thinking", def: "Fast & unconscious" },
+            { term: "Controlled thinking", def: "Slow & effortful" },
+            { term: "Actor-observer diff", def: "Others=personality, Me=situation" },
+            { term: "Stereotype", def: "Schema for groups" },
+            { term: "Counterfactual", def: "What if thinking" },
+            { term: "Overconfidence barrier", def: "Too sure of judgments" },
+            { term: "Consensus (Kelley)", def: "Do others do it?" },
+            { term: "Distinctiveness (Kelley)", def: "Only in this situation?" },
+            { term: "Consistency (Kelley)", def: "Every time?" },
+            { term: "Two-step attribution", def: "Auto internal → adjust" },
+            { term: "Social psychology", def: "How others influence us" },
+            { term: "Random assignment", def: "Eliminates bias" },
+            { term: "B = P × S", def: "Behavior = Person × Situation" },
+            { term: "Thin slices", def: "Quick accurate judgments" },
+            { term: "6 universal emotions", def: "Happy Sad Angry Fear Surprise Disgust" },
+            { term: "Western culture", def: "More FAE" },
+            { term: "Eastern culture", def: "Less FAE, consider situation" },
+            { term: "Control group", def: "Comparison group" },
+            { term: "Experimental research", def: "Can prove causation" },
+            { term: "Correlational research", def: "Cannot prove causation" }
+        ];
+
+        let currentRound = 1;
+        let totalRounds = 5;
+        let roundPairs = [];
+        let selectedTerm = null;
+        let matchedCount = 0;
+        let score = 0;
+        let timer = 0;
+        let timerInterval = null;
+        let usedPairs = [];
+
+        function shuffle(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function startGame() {
+            currentRound = 1;
+            score = 0;
+            usedPairs = [];
+            document.getElementById('playAgainBtn').style.display = 'none';
+            document.getElementById('message').classList.remove('show');
+            startRound();
+        }
+
+        function startRound() {
+            // Get 8 unused pairs
+            const available = allPairs.filter(p => !usedPairs.includes(p.term));
+            roundPairs = shuffle(available).slice(0, 8);
+            roundPairs.forEach(p => usedPairs.push(p.term));
+
+            matchedCount = 0;
+            selectedTerm = null;
+            timer = 0;
+            
+            document.getElementById('round').textContent = currentRound;
+            document.getElementById('matched').textContent = '0';
+            document.getElementById('timer').textContent = '0';
+            document.getElementById('score').textContent = score;
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('message').classList.remove('show');
+
+            // Render terms
+            const termsDiv = document.getElementById('terms');
+            const defsDiv = document.getElementById('definitions');
+            termsDiv.innerHTML = '';
+            defsDiv.innerHTML = '';
+
+            const shuffledTerms = shuffle([...roundPairs]);
+            const shuffledDefs = shuffle([...roundPairs]);
+
+            shuffledTerms.forEach((pair, i) => {
+                const card = document.createElement('div');
+                card.className = 'card term-card';
+                card.textContent = pair.term;
+                card.dataset.term = pair.term;
+                card.onclick = () => selectTerm(card, pair.term);
+                termsDiv.appendChild(card);
+            });
+
+            shuffledDefs.forEach((pair, i) => {
+                const card = document.createElement('div');
+                card.className = 'card def-card';
+                card.textContent = pair.def;
+                card.dataset.term = pair.term;
+                card.onclick = () => selectDef(card, pair.term);
+                defsDiv.appendChild(card);
+            });
+
+            // Start timer
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timer++;
+                document.getElementById('timer').textContent = timer;
+            }, 1000);
+        }
+
+        function selectTerm(card, term) {
+            if (card.classList.contains('matched')) return;
+            
+            document.querySelectorAll('.term-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedTerm = term;
+        }
+
+        function selectDef(card, term) {
+            if (card.classList.contains('matched') || !selectedTerm) return;
+
+            if (selectedTerm === term) {
+                // Correct match!
+                card.classList.add('matched');
+                document.querySelector(`.term-card[data-term="${term}"]`).classList.add('matched');
+                document.querySelector(`.term-card[data-term="${term}"]`).classList.remove('selected');
+                
+                matchedCount++;
+                score += Math.max(100 - timer * 2, 10); // Bonus for speed
+                
+                document.getElementById('matched').textContent = matchedCount;
+                document.getElementById('score').textContent = score;
+                
+                selectedTerm = null;
+
+                if (matchedCount === 8) {
+                    roundComplete();
+                }
+            } else {
+                // Wrong match
+                card.classList.add('wrong');
+                setTimeout(() => card.classList.remove('wrong'), 500);
+                score = Math.max(0, score - 10);
+                document.getElementById('score').textContent = score;
+            }
+        }
+
+        function roundComplete() {
+            clearInterval(timerInterval);
+            
+            if (currentRound < totalRounds) {
+                document.getElementById('message').textContent = `🎉 Round ${currentRound} complete! Time: ${timer}s`;
+                document.getElementById('message').classList.add('show');
+                document.getElementById('nextBtn').style.display = 'block';
+            } else {
+                // Game over
+                document.getElementById('message').innerHTML = `🏆 Game Complete!<br>Final Score: ${score}<br>Great job!`;
+                document.getElementById('message').classList.add('show');
+                document.getElementById('playAgainBtn').style.display = 'block';
+            }
+        }
+
+        function nextRound() {
+            currentRound++;
+            startRound();
+        }
+
+        // Start game on load
+        startGame();
+    </script>
+</body>
+</html>
