@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔪 Violence in America - Mock Exam</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { text-align: center; color: #888; margin-bottom: 20px; }
+        .exam-info {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f093fb, #f5576c);
+            transition: width 0.3s;
+        }
+        .question-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 15px;
+        }
+        .q-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .q-number {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .q-type {
+            color: #888;
+            font-size: 0.85em;
+        }
+        .q-text {
+            font-size: 1.2em;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        .answers { display: flex; flex-direction: column; gap: 10px; }
+        .answer-option {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .answer-option:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); }
+        .answer-option.selected { border-color: #60a5fa; background: rgba(96, 165, 250, 0.2); }
+        .answer-option.correct { border-color: #4ade80; background: rgba(74, 222, 128, 0.2); }
+        .answer-option.wrong { border-color: #f87171; background: rgba(248, 113, 113, 0.2); }
+        .answer-option input { display: none; }
+        .answer-option .letter {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .tf-options { display: flex; gap: 15px; }
+        .tf-options .answer-option { flex: 1; justify-content: center; }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .nav-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-btn.prev { background: rgba(255,255,255,0.2); color: white; }
+        .nav-btn.next { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: white; }
+        .nav-btn.submit { background: linear-gradient(135deg, #4ade80, #22c55e); color: white; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .q-grid {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .q-dot {
+            aspect-ratio: 1;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            transition: all 0.2s;
+        }
+        .q-dot:hover { background: rgba(255,255,255,0.2); }
+        .q-dot.answered { background: #60a5fa; }
+        .q-dot.current { box-shadow: 0 0 0 2px white; }
+        .q-dot.correct { background: #4ade80; }
+        .q-dot.wrong { background: #f87171; }
+        .results {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .results h2 { font-size: 2em; margin-bottom: 20px; }
+        .score-big {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #4ade80, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .score-breakdown {
+            margin: 20px 0;
+            font-size: 1.1em;
+            color: #aaa;
+        }
+        .review-btn {
+            padding: 16px 40px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .hidden { display: none; }
+        .explanation {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 3px solid #4ade80;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔪 MOCK EXAM</h1>
+        <p class="subtitle">Violence in America - CCJ4623</p>
+        
+        <div class="exam-info">
+            <strong>44 Multiple Choice + 11 True/False</strong> • <span id="timer">--:--</span>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+        
+        <div class="q-grid" id="q-grid"></div>
+        
+        <div id="exam-area">
+            <div class="question-card" id="question-card">
+                <div class="q-header">
+                    <span class="q-number" id="q-number">Q1</span>
+                    <span class="q-type" id="q-type">Multiple Choice</span>
+                </div>
+                <div class="q-text" id="q-text">Loading...</div>
+                <div class="answers" id="answers"></div>
+                <div class="explanation hidden" id="explanation"></div>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-btn prev" onclick="prevQ()" id="prev-btn">← Previous</button>
+                <button class="nav-btn next" onclick="nextQ()" id="next-btn">Next →</button>
+                <button class="nav-btn submit hidden" onclick="submitExam()" id="submit-btn">Submit Exam ✓</button>
+            </div>
+        </div>
+        
+        <div id="results" class="results hidden">
+            <h2>📊 Exam Complete!</h2>
+            <div class="score-big" id="final-score">0%</div>
+            <div class="score-breakdown" id="breakdown"></div>
+            <button class="review-btn" onclick="reviewExam()">Review Answers 📝</button>
+            <button class="review-btn" onclick="location.reload()">Retake Exam 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        const mcQuestions = [
+            // DEFINITIONS (8)
+            { q: "Which term refers to the psychological mindset or intent to harm?", a: "Aggression", wrong: ["Violence", "Hostility", "Assault"], exp: "Aggression is the mindset; violence is the behavior." },
+            { q: "According to the course, most perpetrators of violence view their actions as:", a: "Justified or righteous", wrong: ["Completely wrong", "Accidental", "Necessary evils"], exp: "Most perpetrators believe their violence was justified in defense of some value." },
+            { q: "The WHO definition of violence includes all EXCEPT:", a: "Natural disasters", wrong: ["Psychological aggression", "Deprivation", "Neglect"], exp: "WHO includes psychological harm, deprivation, and neglect - not natural events." },
+            { q: "Social distance affects how we:", a: "Label and perceive violent acts", wrong: ["Commit violence physically", "Prevent all violence", "Measure crime rates"], exp: "The more similar to a victim, the more sympathy; similar to offender, more rationalization." },
+            { q: "Which group is most likely to engage in violence regardless of time or country?", a: "Young men", wrong: ["Elderly men", "Young women", "Middle-aged adults"], exp: "Young men consistently commit the most violence across all cultures and time periods." },
+            { q: "Violence used as a means to achieve a specific goal (like robbery) is called:", a: "Instrumental violence", wrong: ["Expressive violence", "Reactive violence", "Defensive violence"], exp: "Instrumental = tool to get something; Expressive = from emotion." },
+            { q: "Violence that expresses an emotional state like anger or jealousy is:", a: "Expressive violence", wrong: ["Instrumental violence", "Calculated violence", "Strategic violence"], exp: "Expressive violence is the goal itself - expressing emotion." },
+            { q: "The process of labeling an act as 'violent' depends heavily on:", a: "Context and social distance", wrong: ["Only the physical harm caused", "Legal definitions alone", "Media coverage"], exp: "Context and our relationship to those involved affects how we label violence." },
+            
+            // BIOLOGICAL & PSYCHOLOGICAL (8)
+            { q: "Phrenology, the pseudoscience claiming skull shape indicated criminality, was used to justify:", a: "Eugenics and forced sterilization", wrong: ["Prison reform", "Mental health treatment", "Educational programs"], exp: "Phrenology's flawed biological theories supported the eugenics movement." },
+            { q: "Serotonin's role in violence is primarily as a(n):", a: "Impulse inhibitor", wrong: ["Aggression trigger", "Memory enhancer", "Pain receptor"], exp: "Low serotonin = reduced impulse control = impulsive violence." },
+            { q: "Research on the relationship between testosterone and violence is best described as:", a: "Mixed and inconclusive", wrong: ["Definitively proven", "Completely disproven", "Not yet studied"], exp: "Environment also influences testosterone levels; relationship is complex." },
+            { q: "The MAOA 'warrior gene' is most strongly linked to aggression when combined with:", a: "Childhood abuse", wrong: ["High education", "Wealth", "Strong parenting"], exp: "Gene + environment interaction: MAOA + childhood abuse = higher aggression." },
+            { q: "Anti-social personality disorder (psychopathy) is characterized by:", a: "Inability to feel empathy or fear", wrong: ["Excessive empathy", "High anxiety", "Strong emotional bonds"], exp: "Psychopaths lack empathy and fear, linked to instrumental violence." },
+            { q: "The frustration-aggression hypothesis states that:", a: "Being blocked from a goal leads to aggression", wrong: ["All aggression comes from frustration", "Frustration reduces aggression", "Goals prevent violence"], exp: "When blocked from achieving desired goals, people may respond with violence." },
+            { q: "According to stress research, excessive stress causes:", a: "Minor insults to feel like major threats", wrong: ["Better impulse control", "Reduced sensitivity", "Increased patience"], exp: "Stress wears down the nervous system, amplifying perceived threats." },
+            { q: "CTE (Chronic Traumatic Encephalopathy) research shows that brain injuries:", a: "Are linked to violence but causation is unclear", wrong: ["Definitely cause violence", "Have no connection to behavior", "Only affect memory"], exp: "Association exists but we can't confirm brain injury causes the violence." },
+            
+            // SOCIOLOGICAL (12)
+            { q: "According to the course, which is a stronger predictor of violence?", a: "Poverty", wrong: ["Race", "Religion", "Nationality"], exp: "Poverty is a stronger predictor of violence than race." },
+            { q: "Being poor in absolute terms is called:", a: "Absolute deprivation", wrong: ["Relative deprivation", "Economic strain", "Class conflict"], exp: "Absolute = poor overall; Relative = poor compared to nearby wealthy." },
+            { q: "Being poor while living near wealthy people is called:", a: "Relative deprivation", wrong: ["Absolute deprivation", "Economic inequality", "Status inconsistency"], exp: "Relative deprivation = poor NEAR the wealthy - stronger predictor of violence." },
+            { q: "Which type of deprivation is a more powerful predictor of violence?", a: "Relative deprivation", wrong: ["Absolute deprivation", "They are equal", "Neither predicts violence"], exp: "Living poor near wealth creates more strain than being poor overall." },
+            { q: "Merton's Classical Strain Theory argues that strain occurs when:", a: "Society emphasizes goals but restricts means", wrong: ["People lack goals", "Means exceed goals", "Everyone achieves goals"], exp: "Society pushes wealth as a goal but blocks legitimate paths to achieve it." },
+            { q: "In Merton's adaptations, using crime to achieve socially valued goals is called:", a: "Innovation", wrong: ["Conformity", "Ritualism", "Retreatism"], exp: "Innovation = accepting goals but using illegitimate (criminal) means." },
+            { q: "Agnew's General Strain Theory expanded strain to include all EXCEPT:", a: "Genetic predisposition", wrong: ["Failure to achieve goals", "Removal of positive stimuli", "Presentation of negative stimuli"], exp: "Agnew's 3 sources: failed goals, lost positives, negative stimuli - not genetics." },
+            { q: "According to 'Code of the Street,' in marginalized communities respect functions as:", a: "Currency", wrong: ["Optional", "Irrelevant", "Government-controlled"], exp: "Respect = currency; violence is used to maintain or gain respect/status." },
+            { q: "Social Learning Theory argues that violence is:", a: "Learned through observation and imitation", wrong: ["Purely genetic", "Always instinctual", "Never learned"], exp: "We learn violence by watching others and through reinforcement." },
+            { q: "Differential Association Theory focuses on:", a: "Who you associate with", wrong: ["Genetic factors", "Economic status alone", "Government policies"], exp: "Associating with those who justify violence increases your likelihood of violence." },
+            { q: "According to Self-Control Theory, low self-control is largely established by age:", a: "8", wrong: ["18", "25", "Birth"], exp: "Self-control is set early (by age 8) through effective/ineffective parenting." },
+            { q: "The relationship between Social Learning and Differential Association is that:", a: "Differential Association explains WHO, Social Learning explains HOW", wrong: ["They are the same theory", "They contradict each other", "Neither explains violence"], exp: "DA = who you learn from; SL = how you learn (observation, reinforcement)." },
+            
+            // HOMICIDE (6)
+            { q: "An accidental killing without negligence is classified as:", a: "Excusable homicide", wrong: ["Justifiable homicide", "Murder", "Manslaughter"], exp: "Excusable = accident, no fault, no negligence." },
+            { q: "A legally acceptable killing in defense of life is:", a: "Justifiable homicide", wrong: ["Excusable homicide", "2nd degree murder", "Felony murder"], exp: "Justifiable = legal, like self-defense." },
+            { q: "Murder requires:", a: "Criminal intent and malice", wrong: ["Only an accident", "Self-defense", "Negligence only"], exp: "Murder = intent + malice (wanting to harm)." },
+            { q: "First degree murder is distinguished by:", a: "Premeditation", wrong: ["Lack of intent", "Self-defense", "Accident"], exp: "1st degree = premeditated/planned in advance." },
+            { q: "An intentional but unplanned killing is classified as:", a: "Second degree murder", wrong: ["First degree murder", "Excusable homicide", "Justifiable homicide"], exp: "2nd degree = intentional but not premeditated." },
+            { q: "When someone dies during the commission of a felony, it's called:", a: "Felony murder", wrong: ["Excusable homicide", "Justifiable homicide", "Accidental death"], exp: "Death during a felony = felony murder (even if unintended)." },
+            
+            // VIOLENT INTERACTIONS (6)
+            { q: "Symbolic interactionism suggests violence occurs when people:", a: "Attach meaning to situations and respond based on interpretations", wrong: ["Act purely on instinct", "Follow genetic programming", "Ignore all context"], exp: "We interpret situations → then respond; same event, different interpretations." },
+            { q: "Young Male Syndrome refers to:", a: "Hypersensitivity to social status and need to save face", wrong: ["Physical aggression only", "Hormonal changes", "Economic competition"], exp: "Young men are especially sensitive to status/disrespect → violence to save face." },
+            { q: "General deterrence aims to:", a: "Prevent others from committing crimes", wrong: ["Rehabilitate offenders", "Punish only that individual", "Reduce prison costs"], exp: "General = scare everyone else; Specific = stop that one person." },
+            { q: "Research on the death penalty as a general deterrent shows it:", a: "Does not effectively prevent crime", wrong: ["Significantly reduces murder", "Completely eliminates crime", "Works better than prison"], exp: "Evidence does not support death penalty as effective general deterrent." },
+            { q: "Alcohol's role in violence is primarily as a(n):", a: "Disinhibitor that increases likelihood and severity", wrong: ["Calming agent", "Violence reducer", "Neutral substance"], exp: "Alcohol removes inhibitions, making violence more likely and more severe." },
+            { q: "Graham & Wells' barroom violence study found key motivations included all EXCEPT:", a: "Financial gain", wrong: ["Male honor", "Face-saving", "Group loyalty"], exp: "Bar fights motivated by honor, face-saving, loyalty, 'fighting for fun' - not money." },
+            
+            // READINGS (4)
+            { q: "Lantz argues that violence in America is primarily caused by:", a: "Structural conditions like poverty and inequality", wrong: ["Individual moral failings", "Media influence alone", "Random chance"], exp: "Lantz emphasizes structural/social conditions as root causes." },
+            { q: "NIBRS represents a 'revolution' in crime statistics because it provides:", a: "Incident-level detail on victims, offenders, and contexts", wrong: ["Only total crime counts", "International comparisons", "Prediction algorithms"], exp: "NIBRS gives detailed info on each incident, not just totals." },
+            { q: "Agnew's General Strain Theory suggests that responses to strain:", a: "Vary based on individual coping mechanisms", wrong: ["Are always violent", "Are always non-violent", "Cannot be predicted"], exp: "People cope differently - not everyone experiencing strain becomes violent." },
+            { q: "Graham & Wells' qualitative study focused on violence in:", a: "Bars and barrooms", wrong: ["Schools", "Prisons", "Workplaces"], exp: "They studied barroom aggression specifically." }
+        ];
+
+        const tfQuestions = [
+            { q: "Aggression and violence are the same thing.", a: false, exp: "Aggression is the mindset/intent; violence is the actual behavior." },
+            { q: "Relative deprivation is a stronger predictor of violence than absolute deprivation.", a: true, exp: "Being poor near wealthy people creates more strain than just being poor." },
+            { q: "The death penalty has been proven to be an effective general deterrent.", a: false, exp: "Research does not support the death penalty as an effective deterrent." },
+            { q: "According to Self-Control Theory, self-control levels are largely set by age 8.", a: true, exp: "Early childhood parenting shapes self-control that persists into adulthood." },
+            { q: "Instrumental violence is motivated primarily by emotions like anger.", a: false, exp: "Instrumental = goal-oriented; Expressive = emotion-driven." },
+            { q: "Low serotonin levels are associated with impulsive violence.", a: true, exp: "Serotonin inhibits impulses; low levels = less inhibition = impulsive acts." },
+            { q: "Phrenology is a scientifically valid method for predicting criminal behavior.", a: false, exp: "Phrenology (skull shape = criminality) is pseudoscience." },
+            { q: "First degree murder requires premeditation.", a: true, exp: "1st degree = planned in advance; 2nd degree = intentional but unplanned." },
+            { q: "According to the course, race is a stronger predictor of violence than poverty.", a: false, exp: "Poverty is a stronger predictor of violence than race." },
+            { q: "Social Learning Theory suggests violence can be learned through observation.", a: true, exp: "We learn violence by watching others and through reinforcement." },
+            { q: "Young Male Syndrome refers to young men's sensitivity to social status and 'saving face.'", a: true, exp: "Young men are hypersensitive to disrespect and status challenges." }
+        ];
+
+        let allQuestions = [];
+        let currentQ = 0;
+        let answers = [];
+        let submitted = false;
+        let startTime = Date.now();
+
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function initExam() {
+            // Shuffle and select 44 MC
+            const mc = shuffle(mcQuestions).slice(0, 44).map(q => ({...q, type: 'mc'}));
+            // All 11 TF
+            const tf = shuffle(tfQuestions).map(q => ({...q, type: 'tf'}));
+            // Combine: MC first, then TF
+            allQuestions = [...mc, ...tf];
+            answers = new Array(allQuestions.length).fill(null);
+            
+            buildGrid();
+            showQuestion(0);
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        function buildGrid() {
+            const grid = document.getElementById('q-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < allQuestions.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'q-dot';
+                dot.textContent = i + 1;
+                dot.onclick = () => showQuestion(i);
+                grid.appendChild(dot);
+            }
+        }
+
+        function updateGrid() {
+            const dots = document.querySelectorAll('.q-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.remove('current', 'answered', 'correct', 'wrong');
+                if (i === currentQ) dot.classList.add('current');
+                if (answers[i] !== null) {
+                    if (submitted) {
+                        const q = allQuestions[i];
+                        const correct = q.type === 'mc' ? answers[i] === q.a : answers[i] === q.a;
+                        dot.classList.add(correct ? 'correct' : 'wrong');
+                    } else {
+                        dot.classList.add('answered');
+                    }
+                }
+            });
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const mins = Math.floor(elapsed / 60);
+            const secs = elapsed % 60;
+            document.getElementById('timer').textContent = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function showQuestion(index) {
+            currentQ = index;
+            const q = allQuestions[index];
+            
+            document.getElementById('q-number').textContent = `Q${index + 1}`;
+            document.getElementById('q-type').textContent = q.type === 'mc' ? 'Multiple Choice' : 'True/False';
+            document.getElementById('q-text').textContent = q.q;
+            document.getElementById('progress').style.width = `${((index + 1) / allQuestions.length) * 100}%`;
+            
+            const answersDiv = document.getElementById('answers');
+            const explanation = document.getElementById('explanation');
+            
+            if (q.type === 'mc') {
+                const options = shuffle([q.a, ...q.wrong]);
+                const letters = ['A', 'B', 'C', 'D'];
+                answersDiv.className = 'answers';
+                answersDiv.innerHTML = options.map((opt, i) => `
+                    <label class="answer-option ${answers[index] === opt ? 'selected' : ''} ${submitted ? (opt === q.a ? 'correct' : (answers[index] === opt ? 'wrong' : '')) : ''}">
+                        <input type="radio" name="q${index}" value="${opt}" ${answers[index] === opt ? 'checked' : ''} ${submitted ? 'disabled' : ''}>
+                        <span class="letter">${letters[i]}</span>
+                        <span>${opt}</span>
+                    </label>
+                `).join('');
+            } else {
+                answersDiv.className = 'answers tf-options';
+                answersDiv.innerHTML = `
+                    <label class="answer-option ${answers[index] === true ? 'selected' : ''} ${submitted ? (q.a === true ? 'correct' : (answers[index] === true ? 'wrong' : '')) : ''}">
+                        <input type="radio" name="q${index}" value="true" ${answers[index] === true ? 'checked' : ''} ${submitted ? 'disabled' : ''}>
+                        <span>TRUE</span>
+                    </label>
+                    <label class="answer-option ${answers[index] === false ? 'selected' : ''} ${submitted ? (q.a === false ? 'correct' : (answers[index] === false ? 'wrong' : '')) : ''}">
+                        <input type="radio" name="q${index}" value="false" ${answers[index] === false ? 'checked' : ''} ${submitted ? 'disabled' : ''}>
+                        <span>FALSE</span>
+                    </label>
+                `;
+            }
+            
+            if (!submitted) {
+                answersDiv.querySelectorAll('input').forEach(input => {
+                    input.addEventListener('change', () => {
+                        if (q.type === 'mc') {
+                            answers[index] = input.value;
+                        } else {
+                            answers[index] = input.value === 'true';
+                        }
+                        showQuestion(index); // Refresh to show selection
+                        updateGrid();
+                        checkSubmitReady();
+                    });
+                });
+                explanation.classList.add('hidden');
+            } else {
+                explanation.classList.remove('hidden');
+                explanation.innerHTML = `<strong>✓ Correct Answer:</strong> ${q.type === 'mc' ? q.a : (q.a ? 'TRUE' : 'FALSE')}<br>${q.exp}`;
+            }
+            
+            // Nav buttons
+            document.getElementById('prev-btn').disabled = index === 0;
+            if (index === allQuestions.length - 1 && !submitted) {
+                document.getElementById('next-btn').classList.add('hidden');
+                document.getElementById('submit-btn').classList.remove('hidden');
+            } else {
+                document.getElementById('next-btn').classList.remove('hidden');
+                document.getElementById('submit-btn').classList.add('hidden');
+            }
+            
+            updateGrid();
+        }
+
+        function nextQ() {
+            if (currentQ < allQuestions.length - 1) showQuestion(currentQ + 1);
+        }
+
+        function prevQ() {
+            if (currentQ > 0) showQuestion(currentQ - 1);
+        }
+
+        function checkSubmitReady() {
+            const unanswered = answers.filter(a => a === null).length;
+            document.getElementById('submit-btn').textContent = 
+                unanswered > 0 ? `Submit (${unanswered} unanswered)` : 'Submit Exam ✓';
+        }
+
+        function submitExam() {
+            const unanswered = answers.filter(a => a === null).length;
+            if (unanswered > 0) {
+                if (!confirm(`You have ${unanswered} unanswered questions. Submit anyway?`)) return;
+            }
+            
+            submitted = true;
+            
+            let mcCorrect = 0, tfCorrect = 0;
+            allQuestions.forEach((q, i) => {
+                const correct = q.type === 'mc' ? answers[i] === q.a : answers[i] === q.a;
+                if (correct) {
+                    if (q.type === 'mc') mcCorrect++;
+                    else tfCorrect++;
+                }
+            });
+            
+            const total = mcCorrect + tfCorrect;
+            const pct = Math.round((total / 55) * 100);
+            
+            document.getElementById('exam-area').classList.add('hidden');
+            document.getElementById('results').classList.remove('hidden');
+            document.getElementById('final-score').textContent = `${pct}%`;
+            document.getElementById('breakdown').innerHTML = `
+                Multiple Choice: ${mcCorrect}/44<br>
+                True/False: ${tfCorrect}/11<br>
+                Total: ${total}/55
+            `;
+            
+            updateGrid();
+        }
+
+        function reviewExam() {
+            document.getElementById('results').classList.add('hidden');
+            document.getElementById('exam-area').classList.remove('hidden');
+            document.getElementById('submit-btn').classList.add('hidden');
+            document.getElementById('next-btn').classList.remove('hidden');
+            showQuestion(0);
+        }
+
+        initExam();
+    </script>
+</body>
+</html>
