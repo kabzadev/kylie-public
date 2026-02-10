@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Family Violence Matching Game</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #121212; color: white; }
+        .game-container { display: flex; justify-content: space-around; padding: 20px; }
+        .column { width: 45%; }
+        .item { 
+            padding: 15px; margin: 10px; background: #1e1e1e; border: 2px solid #333; 
+            cursor: pointer; border-radius: 8px; transition: 0.3s;
+        }
+        .item:hover { background: #333; }
+        .selected { border-color: #007bff; background: #004a99; }
+        .matched { visibility: hidden; }
+        #message { font-size: 24px; color: #28a745; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Family Violence Matching Game 🎮</h1>
+    <p>Match the Term to its Vibe!</p>
+    <div class="game-container">
+        <div class="column" id="terms"></div>
+        <div class="column" id="defs"></div>
+    </div>
+    <div id="message"></div>
+
+    <script>
+        const pairs = [
+            { t: "SHINE", d: "Insurance Help" },
+            { t: "RELIEF", d: "Breaks for Families (Respite)" },
+            { t: "HCE", d: "$160 Monthly Payment" },
+            { t: "CARES", d: "Nursing Home Screening" },
+            { t: "David", d: "Social Learning (Watching)" },
+            { t: "Jacob", d: "General Strain (Anger)" },
+            { t: "99%", d: "Relative/Known Violence" },
+            { t: "Sumter, FL", d: "53% are 65+" }
+        ];
+
+        let selectedTerm = null;
+        let selectedDef = null;
+
+        function shuffle(array) { return array.sort(() => Math.random() - 0.5); }
+
+        function init() {
+            const termCol = document.getElementById('terms');
+            const defCol = document.getElementById('defs');
+            
+            shuffle([...pairs]).forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerText = p.t;
+                div.onclick = () => {
+                    if(selectedTerm) selectedTerm.classList.remove('selected');
+                    selectedTerm = div;
+                    div.classList.add('selected');
+                    check();
+                };
+                termCol.appendChild(div);
+            });
+
+            shuffle([...pairs]).forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerText = p.d;
+                div.onclick = () => {
+                    if(selectedDef) selectedDef.classList.remove('selected');
+                    selectedDef = div;
+                    div.classList.add('selected');
+                    check();
+                };
+                defCol.appendChild(div);
+            });
+        }
+
+        function check() {
+            if (selectedTerm && selectedDef) {
+                const match = pairs.find(p => p.t === selectedTerm.innerText && p.d === selectedDef.innerText);
+                if (match) {
+                    selectedTerm.classList.add('matched');
+                    selectedDef.classList.add('matched');
+                    selectedTerm = null;
+                    selectedDef = null;
+                    if (document.querySelectorAll('.item:not(.matched)').length === 0) {
+                        document.getElementById('message').innerText = "YOU CRUSHED IT! 🏆";
+                    }
+                } else {
+                    setTimeout(() => {
+                        selectedTerm.classList.remove('selected');
+                        selectedDef.classList.remove('selected');
+                        selectedTerm = null;
+                        selectedDef = null;
+                    }, 500);
+                }
+            }
+        }
+        init();
+    </script>
+</body>
+</html>
