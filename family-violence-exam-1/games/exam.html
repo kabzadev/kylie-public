@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Family Violence Practice Exam</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; max-width: 800px; margin: auto; }
+        .question { background: #1e1e1e; padding: 20px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #333; }
+        .options { margin-top: 10px; }
+        label { display: block; padding: 10px; margin: 5px 0; background: #2a2a2a; border-radius: 5px; cursor: pointer; transition: 0.2s; }
+        label:hover { background: #3a3a3a; }
+        input[type="radio"] { margin-right: 10px; }
+        button { background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-size: 18px; margin-top: 20px; width: 100%; }
+        button:hover { background: #0056b3; }
+        #results { margin-top: 30px; padding: 20px; border-radius: 10px; display: none; }
+        .correct { color: #28a745; font-weight: bold; }
+        .incorrect { color: #dc3545; font-weight: bold; }
+        .feedback { font-style: italic; color: #aaa; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Family Violence Practice Exam 📝</h1>
+    <p>Test your knowledge on the core theories and Florida-specific programs.</p>
+
+    <form id="quizForm">
+        <div class="question">
+            <p>1. <b>David</b> witnessed his dad hit his mom and now handles disagreements with his partner using violence. Which theory best explains this?</p>
+            <div class="options">
+                <label><input type="radio" name="q1" value="a"> A) General Strain Theory</label>
+                <label><input type="radio" name="q1" value="b"> B) Social Learning Theory</label>
+                <label><input type="radio" name="q1" value="c"> C) Social Disorganization Theory</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>2. Which program provides a <b>$160 monthly payment</b> to help support and provide maintenance for elders in Florida?</p>
+            <div class="options">
+                <label><input type="radio" name="q2" value="a"> A) SHINE</label>
+                <label><input type="radio" name="q2" value="b"> B) RELIEF</label>
+                <label><input type="radio" name="q2" value="c"> C) HCE program</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>3. <b>Jacob</b> lost his job and felt intense <b>anger</b> before stealing his grandmother's credit card. Which theory is this?</p>
+            <div class="options">
+                <label><input type="radio" name="q3" value="a"> A) General Strain Theory</label>
+                <label><input type="radio" name="q3" value="b"> B) Deterrence Theory</label>
+                <label><input type="radio" name="q3" value="c"> C) Social Learning Theory</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>4. What percentage of violence in family cases typically involves people <b>known</b> to the victim vs. strangers?</p>
+            <div class="options">
+                <label><input type="radio" name="q4" value="a"> A) Known: 99%, Stranger: 38%</label>
+                <label><input type="radio" name="q4" value="b"> B) Known: 50%, Stranger: 50%</label>
+                <label><input type="radio" name="q4" value="c"> C) Known: 38%, Stranger: 99%</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <p>5. The <b>SHINE</b> program in Florida is primarily designed to help elders with:</p>
+            <div class="options">
+                <label><input type="radio" name="q5" value="a"> A) Finding a foster home</label>
+                <label><input type="radio" name="q5" value="b"> B) Health insurance, Medicare, and Medicaid</label>
+                <label><input type="radio" name="q5" value="c"> C) Reporting physical abuse</label>
+            </div>
+        </div>
+
+        <button type="button" onclick="checkQuiz()">Submit Exam</button>
+    </form>
+
+    <div id="results"></div>
+
+    <script>
+        function checkQuiz() {
+            const answers = { q1: 'b', q2: 'c', q3: 'a', q4: 'a', q5: 'b' };
+            const feedback = {
+                q1: "Social Learning = David 'learned' it by watching his dad.",
+                q2: "HCE = Home Care for the Elderly ($160 check).",
+                q3: "General Strain = Jacob felt 'strain' (job loss) and 'anger'.",
+                q4: "Remember the myth: You're way more likely to be hurt by someone you know (99%)!",
+                q5: "SHINE = Serving Health Insurance Needs of Elders."
+            };
+            
+            let score = 0;
+            const form = document.getElementById('quizForm');
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>Exam Results</h2>';
+
+            for (let q in answers) {
+                const selected = form.elements[q].value;
+                if (selected === answers[q]) {
+                    score++;
+                    resultsDiv.innerHTML += `<p class="correct">Question ${q.slice(1)}: Correct!</p>`;
+                } else {
+                    resultsDiv.innerHTML += `<p class="incorrect">Question ${q.slice(1)}: Incorrect.</p>`;
+                }
+                resultsDiv.innerHTML += `<p class="feedback">${feedback[q]}</p><br>`;
+            }
+
+            resultsDiv.innerHTML += `<h3>Final Score: ${score}/5</h3>`;
+            resultsDiv.style.display = 'block';
+            resultsDiv.style.background = score >= 4 ? '#1e3a1e' : '#3a1e1e';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    </script>
+</body>
+</html>
