@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kylie's Night Before Exam (50 New Questions)</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #2d0a15; color: #fff; padding: 20px; max-width: 850px; margin: auto; }
+        .header { background: #78243c; color: #ceb888; padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 30px; border: 4px solid #ceb888; }
+        .question { background: #3d1421; padding: 20px; margin-bottom: 20px; border-radius: 15px; border: 1px solid #ceb888; }
+        label { display: block; padding: 12px; margin: 5px 0; background: #4d1a2a; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+        label:hover { background: #5d2235; border: 1px solid #fff; }
+        input[type="radio"] { margin-right: 12px; }
+        button { background: #ceb888; color: #78243c; border: none; padding: 20px; border-radius: 15px; cursor: pointer; font-size: 24px; width: 100%; font-weight: bold; margin-top: 20px; }
+        button:hover { background: #fff; transform: scale(1.02); }
+        #results { margin-top: 30px; padding: 30px; border-radius: 20px; display: none; background: #1e1e1e; border: 3px solid #ceb888; text-align: center; }
+        .correct { color: #2ecc71; font-weight: bold; }
+        .incorrect { color: #e74c3c; font-weight: bold; }
+        .feedback { color: #ccc; font-style: italic; font-size: 0.9em; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🍢 THE "NIGHT BEFORE" 50-QUESTION EXAM 🍢</h1>
+        <p>Fresh questions, new scenarios, same big brain energy! 💅</p>
+    </div>
+
+    <form id="nightForm">
+        <div id="questionsContainer"></div>
+        <button type="button" onclick="checkNightExam()">🍢 SUBMIT FINAL PRACTICE 🍢</button>
+    </form>
+
+    <div id="results"></div>
+
+    <script>
+        const questions = [
+            { q: "If you and your roommate get into a fight, can it be legally defined as family violence?", a: "T", o: ["True", "False"], f: "Yes! Household members count regardless of blood/marriage." },
+            { q: "Which theory focuses on 'Differential Association' and learning through others?", a: "SLT", o: ["Social Learning Theory (SLT)", "General Strain Theory", "Social Disorganization"], f: "Learning = Association." },
+            { q: "A neighborhood has high poverty and people move every few months. Crime is high because of:", a: "SDT", o: ["Social Disorganization Theory (SDT)", "General Strain Theory", "Self-Awareness Theory"], f: "Places + Poverty + Moving = SDT." },
+            { q: "Jacob's 'Anger' after losing his job is a classic example of:", a: "GST", o: ["General Strain Theory (GST)", "Social Learning", "Deterrence"], f: "Anger is the GST engine." },
+            { q: "True or False: Intimate Partner Violence (IPV) includes your parents and siblings.", a: "F", o: ["True", "False (Only partners)"], f: "Parent/Child is maltreatment, not IPV." },
+            { q: "Which Florida program is 'Federally mandated but State operated'?", a: "DOEA", o: ["Department of Elder Affairs (DOEA)", "Social Security", "FBI"], f: "DOEA manages FL programs." },
+            { q: "What is the strongest protective factor for elders against abuse?", a: "SS", o: ["Social Support", "Financial Wealth", "Living Alone"], f: "Social Support is the #1 protector." },
+            { q: "True or False: Abuse is 9x more likely for those who were maltreated as kids.", a: "T", o: ["True", "False"], f: "Correct! The '9x' rule." },
+            { q: "Which court deals with 'Restitution' (paying money back) most often?", a: "CV", o: ["Civil Court", "Criminal Court", "Family Court"], f: "Civil = Money/Restitution." },
+            { q: "A single judge makes the ruling in which court?", a: "FC", o: ["Family Court", "Civil Court", "Criminal Court"], f: "Family Court = Single Judge." },
+            { q: "True or False: There is NO federal law for criminal prosecution of financial elder abuse.", a: "T", o: ["True", "False"], f: "Correct, it's state-by-state." },
+            { q: "What is the frequency in which people move from one location to another called?", a: "RM", o: ["Residential Mobility", "Social Heterogeneity", "Ableism"], f: "Residential Mobility." },
+            { q: "Which manslaughter is 'Recognized the harm but disregarded it'?", a: "R", o: ["Reckless", "Negligent"], f: "Reckless = I knew but didn't care." },
+            { q: "Which manslaughter is 'Should have realized but did not'?", a: "N", o: ["Negligent", "Reckless"], f: "Negligent = I didn't know (but should've)." },
+            { q: "True or False: Assault and Battery are legally interchangeable in most contexts.", a: "T", o: ["True", "False"], f: "Correct, they are often used together." },
+            { q: "What hormone impacts every organ and increases as we age?", a: "C", o: ["Cortisol", "Estrogen", "Dopamine"], f: "Cortisol is the stress hormone." },
+            { q: "Elderly men are at a significantly higher risk for what?", a: "S", o: ["Suicide", "Robbery", "Child Maltreatment"], f: "Suicide risk is higher for elderly men." },
+            { q: "True or False: Abuse of those 80+ is most often 'Abandonment'.", a: "F", o: ["True", "False (It is Neglect)"], f: "80+ = Neglect." },
+            { q: "What is the evaluation tool used by a professional team for frail elders?", a: "CGA", o: ["CGA (Comprehensive Geriatric Assessment)", "APS", "CARES"], f: "CGA is the team assessment." },
+            { q: "Which role ensures Physical and Medical care?", a: "G", o: ["Guardianship", "Conservatorship", "POA"], f: "Guardianship = Medical/Physical." },
+            { q: "Which role ensures Financial and Personal decisions?", a: "C", o: ["Conservatorship", "Guardianship", "HCE"], f: "Conservatorship = Money." },
+            { q: "True or False: Medicare is for low-income; Medicaid is for those 65+.", a: "F", o: ["True", "False (It's the other way around)"], f: "Medicare = 65+/SS; Medicaid = Low Income." },
+            { q: "Which Florida program gives $160 a month for home care?", a: "HCE", o: ["HCE", "SHINE", "RELIEF"], f: "HCE = $160." },
+            { q: "SHINE offers information in which two languages?", a: "ES", o: ["English and Spanish", "English and French"], f: "English and Spanish." },
+            { q: "What color is World Elder Abuse Awareness Day?", a: "P", o: ["Purple", "Garnet", "Gold"], f: "Purple (June 15th)." },
+            { q: "True or False: Self-neglect is when an elder lives alone and refuses help.", a: "T", o: ["True", "False"], f: "Yes, 20% of elders live alone." },
+            { q: "True or False: 99% of violence cases involve strangers.", a: "F", o: ["True", "False (It's relatives/known people)"], f: "Stranger danger is a myth!" },
+            { q: "Which theory says we 'protect our ego' by making excuses?", a: "SH", o: ["Self-Handicapping", "Self-Awareness", "General Strain"], f: "Self-Handicapping = Ego protection." },
+            { q: "Telling your coach 'I'm tired' before you even start a run is:", a: "RSH", o: ["Reported Self-Handicapping", "Behavioral Self-Handicapping"], f: "Words = Reported." },
+            { q: "Taking a date to a scary bridge to make their heart race is:", a: "MA", o: ["Misattribution of Arousal", "Social Learning", "Deterrence"], f: "Mislabeling fear as attraction." },
+            { q: "True or False: Behavioral handicapping involves actions like staying up all night.", a: "T", o: ["True", "False"], f: "Correct! Actions = Behavioral." },
+            { q: "Looking in a mirror makes you follow your values MORE. This is:", a: "SAT", o: ["Self-Awareness Theory", "Self-Handicapping", "Ableism"], f: "Mirrors increase self-awareness." },
+            { q: "True or False: Escapism is a 'Pro' of being self-aware.", a: "F", o: ["True", "False (It is a Con)"], f: "Escapism is how we avoid uncomfortable self-awareness." },
+            { q: "Which theory says 1st Degree Murder needs 'Planning'?", a: "D", o: ["Deliberation", "Premeditation", "Both"], f: "It needs both Premeditation and Deliberation." },
+            { q: "The 'Jorge Torres suitcase case' is an example of:", a: "2M", o: ["2nd Degree Murder", "1st Degree Murder", "Excusable Homicide"], f: "2nd Degree = Spontaneous but Intentional." },
+            { q: "True or False: Civil Court requires 'Beyond a Reasonable Doubt'.", a: "F", o: ["True", "False (Civil = Probable Cause)"], f: "Correct! Criminal has the high burden." },
+            { q: "What % of Sumter, FL is 65+?", a: "53", o: ["53%", "25%", "83%"], f: "Sumter = 53%." },
+            { q: "True or False: Race directly increases the likelihood of elder abuse.", a: "F", o: ["True", "False (It operates through SES)"], f: "SES is the key factor." },
+            { q: "Which program provides 'Respite' (breaks) for family members?", a: "R", o: ["RELIEF", "SHINE", "CARES"], f: "RELIEF = Respite." },
+            { q: "What is the strongest protector against elder abuse?", a: "SS", o: ["Social Support", "More Locks", "Living Alone"], f: "Social Support is #1." },
+            { q: "True or False: Neglect is the LEAST common form of abuse.", a: "F", o: ["True", "False (It is the MOST common)"], f: "Neglect is #1." },
+            { q: "Which agency manages the 'Elder Justice Initiative'?", a: "DOJ", o: ["Department of Justice (DOJ)", "APS", "HHS"], f: "DOJ = Elder Justice Initiative." },
+            { q: "What is 'CGA' primarily used for?", a: "FP", o: ["Future Planning for frail elders", "Sentencing criminals"], f: "CGA aids in future planning." },
+            { q: "True or False: Homicide is any killing of another individual.", a: "T", o: ["True", "False"], f: "Correct legal definition." },
+            { q: "Aggravated assault involves what?", a: "W", o: ["A weapon or serious injury", "Just words"], f: "Aggravated = Serious/Weapon." },
+            { q: "True or False: Mandatory reporting is NOT required for elder abuse.", a: "F", o: ["True", "False (It IS required)"], f: "Correct! Mandatory for child & elder." },
+            { q: "The 'RAISE' Act (2018) stands for what?", a: "RAISE", o: ["Recognize, Assist, Include, Support, Engage", "Rising Against Injustice Socially"], f: "RAISE = Recognize, Assist, Include, Support, Engage." },
+            { q: "Which program provides $841/month for single low-income people?", a: "SSI", o: ["SSI", "HCE", "Medicare"], f: "SSI = Supplemental Security Income." },
+            { q: "True or False: 8/10 deaths from COVID-19 were those 65+.", a: "T", o: ["True", "False"], f: "Correct!" },
+            { q: "Is Kylie going to pass this exam tomorrow?", a: "Y", o: ["Yes! 🍢", "Definitely! 💅"], f: "Correct! 🚀" }
+        ];
+
+        function init() {
+            const container = document.getElementById('questionsContainer');
+            questions.forEach((q, i) => {
+                const div = document.createElement('div');
+                div.className = 'question';
+                div.innerHTML = `<p><b>${i+1}. ${q.q}</b></p>`;
+                q.o.forEach(opt => {
+                    const label = document.createElement('label');
+                    label.innerHTML = `<input type="radio" name="q${i}" value="${opt}"> ${opt}`;
+                    div.appendChild(label);
+                });
+                container.appendChild(div);
+            });
+        }
+
+        function checkNightExam() {
+            let score = 0;
+            const results = document.getElementById('results');
+            results.innerHTML = '<h2>🍢 FINAL SCORE 🍢</h2>';
+            questions.forEach((q, i) => {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected && (selected.value.includes(q.a) || selected.value === q.o[0] && q.a === 'T' || selected.value === q.o[1] && q.a === 'F')) {
+                    score++;
+                }
+            });
+            results.innerHTML += `<div style="font-size: 2.5em; margin: 20px 0;">${score}/50</div>`;
+            results.innerHTML += `<p>You've got this, Kylie! Get some sleep! 🍢🚀</p>`;
+            results.style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+        init();
+    </script>
+</body>
+</html>
