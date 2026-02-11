@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kylie's ULTIMATE Family Violence Exam</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; max-width: 900px; margin: auto; line-height: 1.6; }
+        .question { background: #1e1e1e; padding: 25px; margin-bottom: 25px; border-radius: 12px; border: 1px solid #444; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .options { margin-top: 15px; }
+        label { display: block; padding: 12px; margin: 8px 0; background: #2a2a2a; border-radius: 8px; cursor: pointer; transition: 0.2s; border: 1px solid transparent; }
+        label:hover { background: #3a3a3a; border-color: #007bff; }
+        input[type="radio"] { margin-right: 12px; transform: scale(1.2); }
+        button { background: #28a745; color: white; border: none; padding: 20px 40px; border-radius: 8px; cursor: pointer; font-size: 20px; font-weight: bold; margin-top: 30px; width: 100%; transition: 0.3s; }
+        button:hover { background: #218838; transform: translateY(-2px); }
+        #results { margin-top: 40px; padding: 30px; border-radius: 12px; display: none; border: 2px solid #555; }
+        .correct { color: #2ecc71; font-weight: bold; font-size: 1.1em; }
+        .incorrect { color: #e74c3c; font-weight: bold; font-size: 1.1em; }
+        .feedback { color: #ccc; margin-top: 8px; font-style: italic; border-left: 3px solid #007bff; padding-left: 10px; }
+        .score-display { font-size: 2em; margin-bottom: 20px; }
+        .stat-highlight { color: #f1c40f; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Kylie's ULTIMATE Family Violence Exam 📝</h1>
+    <p>This exam combines the Quizlet terms, your Class PDF, and the "Guaranteed 10" questions. Let's go!</p>
+
+    <form id="ultimateForm">
+        <!-- Q1: Theory Story (David) -->
+        <div class="question">
+            <p>1. <b>David</b> witnessed his dad hit his mom as a child and now uses physical violence with his partners, saying, <b>"That's just how I was raised, man."</b> Which theory is this?</p>
+            <div class="options">
+                <label><input type="radio" name="q1" value="a"> General Strain Theory</label>
+                <label><input type="radio" name="q1" value="b"> Social Disorganization Theory</label>
+                <label><input type="radio" name="q1" value="c"> Social Learning Theory</label>
+            </div>
+        </div>
+
+        <!-- Q2: Race & SES (The tricky one!) -->
+        <div class="question">
+            <p>2. Which of the following BEST describes the relationship between an individual’s <b>race</b> and their likelihood of becoming a victim of <b>elder abuse</b>?</p>
+            <div class="options">
+                <label><input type="radio" name="q2" value="a"> Racial minority status directly causes abuse.</label>
+                <label><input type="radio" name="q2" value="b"> The relationship operates through SES (Socio-Economic Status).</label>
+                <label><input type="radio" name="q2" value="c"> Race and elder abuse are not related at all.</label>
+            </div>
+        </div>
+
+        <!-- Q3: Definition (Roommates) -->
+        <div class="question">
+            <p>3. Does the legal definition of <b>family violence</b> include individuals who are NOT related by blood or marriage, such as <b>roommates</b>?</p>
+            <div class="options">
+                <label><input type="radio" name="q3" value="a"> Yes, if they live in the same household.</label>
+                <label><input type="radio" name="q3" value="b"> No, they must be married or blood-related.</label>
+                <label><input type="radio" name="q3" value="c"> Only if they are also intimate partners.</label>
+            </div>
+        </div>
+
+        <!-- Q4: Theory Story (Jacob) -->
+        <div class="question">
+            <p>4. <b>Jacob</b> was fired from his job, felt intense <b>anger</b>, and stole his grandmother's credit card. Which theory best explains this?</p>
+            <div class="options">
+                <label><input type="radio" name="q4" value="a"> Social Learning Theory</label>
+                <label><input type="radio" name="q4" value="b"> General Strain Theory</label>
+                <label><input type="radio" name="q4" value="c"> Deterrence Theory</label>
+            </div>
+        </div>
+
+        <!-- Q5: Statistics (Maltreatment) -->
+        <div class="question">
+            <p>5. Victims of maltreatment are how many times more likely to engage in criminal activity later in life?</p>
+            <div class="options">
+                <label><input type="radio" name="q5" value="a"> 2 times more likely</label>
+                <label><input type="radio" name="q5" value="b"> 5 times more likely</label>
+                <label><input type="radio" name="q5" value="c"> 9 times more likely</label>
+            </div>
+        </div>
+
+        <!-- Q6: Program Logic (SHINE) -->
+        <div class="question">
+            <p>6. What is the primary purpose of the <b>SHINE</b> program in Florida?</p>
+            <div class="options">
+                <label><input type="radio" name="q6" value="a"> Providing $160 monthly for home care.</label>
+                <label><input type="radio" name="q6" value="b"> Serving Health Insurance needs (Medicare/Medicaid).</label>
+                <label><input type="radio" name="q6" value="c"> Screening for nursing home applicants.</label>
+            </div>
+        </div>
+
+        <!-- Q7: Legal (Guardian vs Conservator) -->
+        <div class="question">
+            <p>7. Which court-ordered role is specifically tasked with ensuring <b>physical and medical care</b> for an individual?</p>
+            <div class="options">
+                <label><input type="radio" name="q7" value="a"> Conservatorship</label>
+                <label><input type="radio" name="q7" value="b"> Power of Attorney</label>
+                <label><input type="radio" name="q7" value="c"> Guardianship</label>
+            </div>
+        </div>
+
+        <!-- Q8: Theory (Agnew's Emotion) -->
+        <div class="question">
+            <p>8. According to Agnew’s General Strain Theory, which emotion is <b>MOST</b> likely to result in delinquency?</p>
+            <div class="options">
+                <label><input type="radio" name="q8" value="a"> Depression</label>
+                <label><input type="radio" name="q8" value="b"> Anger</label>
+                <label><input type="radio" name="q8" value="c"> Anxiety</label>
+            </div>
+        </div>
+
+        <!-- Q9: Statistics (COVID) -->
+        <div class="question">
+            <p>9. Elder abuse increased by what percentage during the <b>COVID-19</b> pandemic?</p>
+            <div class="options">
+                <label><input type="radio" name="q9" value="a"> 25%</label>
+                <label><input type="radio" name="q9" value="b"> 50%</label>
+                <label><input type="radio" name="q9" value="c"> 83%</label>
+            </div>
+        </div>
+
+        <!-- Q10: Theory (Mobility) -->
+        <div class="question">
+            <p>10. What is <b>Residential Mobility</b> in Social Disorganization Theory?</p>
+            <div class="options">
+                <label><input type="radio" name="q10" value="a"> The ease of moving for elderly with wheelchairs.</label>
+                <label><input type="radio" name="q10" value="b"> The frequency in which people move from one location to another.</label>
+                <label><input type="radio" name="q10" value="c"> The total number of houses in a neighborhood.</label>
+            </div>
+        </div>
+
+        <button type="button" onclick="checkFinalExam()">SUBMIT FINAL EXAM</button>
+    </form>
+
+    <div id="results"></div>
+
+    <script>
+        function checkFinalExam() {
+            const answers = { q1: 'c', q2: 'b', q3: 'a', q4: 'b', q5: 'c', q6: 'b', q7: 'c', q8: 'b', q9: 'c', q10: 'b' };
+            const feedback = {
+                q1: "Social Learning = David 'witnessed' it and repeated it.",
+                q2: "Race operates through SES (Socio-Economic Status).",
+                q3: "Yes! Family violence includes roommates in the same house.",
+                q4: "General Strain = Fired + Anger + Crime.",
+                q5: "Maltreatment victims are <span class='stat-highlight'>9x</span> more likely to be criminal later.",
+                q6: "SHINE = Health Insurance (Medicare/Medicaid).",
+                q7: "Guardianship = Physical/Medical. Conservatorship = Money/Personal.",
+                q8: "ANGER is the main engine of crime in Strain Theory.",
+                q9: "Elder abuse spiked <span class='stat-highlight'>83%</span> during COVID.",
+                q10: "Residential Mobility = Frequency of moving (messing up social control)."
+            };
+
+            let score = 0;
+            const form = document.getElementById('ultimateForm');
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="score-display">Calculating Results...</div>';
+            resultsDiv.style.display = 'block';
+
+            setTimeout(() => {
+                resultsDiv.innerHTML = '';
+                for (let q in answers) {
+                    const selected = form.elements[q].value;
+                    const qNum = q.slice(1);
+                    if (selected === answers[q]) {
+                        score++;
+                        resultsDiv.innerHTML += `<p class="correct">Q${qNum}: Correct! ✅</p>`;
+                    } else {
+                        resultsDiv.innerHTML += `<p class="incorrect">Q${qNum}: Incorrect ❌</p>`;
+                    }
+                    resultsDiv.innerHTML += `<p class="feedback">${feedback[q]}</p><hr style='border: 0.5px solid #444'>`;
+                }
+                const finalGrade = (score / 10) * 100;
+                resultsDiv.innerHTML = `<div class='score-display'>Final Score: ${score}/10 (${finalGrade}%)</div>` + resultsDiv.innerHTML;
+                resultsDiv.style.background = score >= 8 ? '#1e3a1e' : '#3a1e1e';
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 800);
+        }
+    </script>
+</body>
+</html>
