@@ -3,57 +3,247 @@
 <head>
     <title>Kylie's FSU 50-Question Simulator</title>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; max-width: 900px; margin: auto; }
+        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; max-width: 900px; margin: auto; line-height: 1.6; }
         .question { background: #1e1e1e; padding: 20px; margin-bottom: 20px; border-radius: 12px; border: 1px solid #444; }
-        label { display: block; padding: 10px; margin: 5px 0; background: #2a2a2a; border-radius: 8px; cursor: pointer; }
-        button { background: #78243c; color: white; border: 2px solid #ceb888; padding: 20px; border-radius: 8px; cursor: pointer; font-size: 20px; width: 100%; }
-        #results { margin-top: 30px; padding: 20px; border-radius: 12px; display: none; background: #333; border: 2px solid #ceb888; }
-        .correct { color: #2ecc71; } .incorrect { color: #e74c3c; }
+        label { display: block; padding: 12px; margin: 5px 0; background: #2a2a2a; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        label:hover { background: #3a3a3a; }
+        input[type="radio"] { margin-right: 12px; }
+        button { background: #78243c; color: white; border: 2px solid #ceb888; padding: 20px; border-radius: 8px; cursor: pointer; font-size: 20px; width: 100%; font-weight: bold; }
+        #results { margin-top: 30px; padding: 30px; border-radius: 12px; display: none; background: #333; border: 2px solid #ceb888; }
+        .correct { color: #2ecc71; font-weight: bold; }
+        .incorrect { color: #e74c3c; font-weight: bold; }
+        .feedback { color: #aaa; font-style: italic; margin-bottom: 10px; border-left: 2px solid #ceb888; padding-left: 10px; }
     </style>
 </head>
 <body>
-    <h1 style="color:#ceb888">🍢 FSU Exam Simulator (The Final Pass)</h1>
-    <form id="finalForm">
-        <div class="question"><p>1. <b>David</b> witnessed his dad hit his mom and now hits his partner. Theory?</p>
+    <h1 style="color:#ceb888; text-align: center;">🍢 FSU 50-QUESTION SIMULATOR 🍢</h1>
+    <p style="text-align: center;">This is the full length. Take it to build your "Test Endurance" for tomorrow!</p>
+
+    <form id="fiftyForm">
+        <!-- THEORIES (10 Qs) -->
+        <div class="question"><p>1. <b>David</b> witnessed his dad hit his mom and now uses violence with his partners. Which theory?</p>
             <label><input type="radio" name="q1" value="c"> Social Learning Theory</label>
             <label><input type="radio" name="q1" value="a"> General Strain Theory</label></div>
-        <div class="question"><p>2. <b>Jacob</b> got angry after losing his job and stole a credit card. Theory?</p>
-            <label><input type="radio" name="q1" value="a"> General Strain Theory</label>
-            <label><input type="radio" name="q1" value="c"> Social Learning Theory</label></div>
-        <div class="question"><p>3. What is the strongest protective factor for elder abuse?</p>
-            <label><input type="radio" name="q3" value="a"> Social Support</label>
-            <label><input type="radio" name="q3" value="b"> More Money</label></div>
-        <div class="question"><p>4. Which role is court-ordered for <b>physical/medical care</b>?</p>
-            <label><input type="radio" name="q4" value="a"> Guardianship</label>
-            <label><input type="radio" name="q4" value="b"> Conservatorship</label></div>
-        <div class="question"><p>5. Which hormone suppresses systems not involved in survival?</p>
-            <label><input type="radio" name="q5" value="a"> Cortisol</label>
-            <label><input type="radio" name="q5" value="b"> Adrenaline</label></div>
-        <div class="question"><p>6. Relationship between race and elder abuse operates through what?</p>
-            <label><input type="radio" name="q6" value="a"> SES (Socio-Economic Status)</label>
-            <label><input type="radio" name="q6" value="b"> Genetics</label></div>
-        <div class="question"><p>7. True or False: <b>Roommates</b> count as family violence in Florida.</p>
+        
+        <div class="question"><p>2. <b>Jacob</b> got angry after losing his job and stole a credit card. Which theory?</p>
+            <label><input type="radio" name="q2" value="a"> General Strain Theory</label>
+            <label><input type="radio" name="q2" value="b"> Social Disorganization Theory</label></div>
+
+        <div class="question"><p>3. High "Residential Mobility" (frequency of moving) is a key part of which theory?</p>
+            <label><input type="radio" name="q3" value="a"> Social Disorganization Theory</label>
+            <label><input type="radio" name="q3" value="b"> General Strain Theory</label></div>
+
+        <div class="question"><p>4. <b>Anger</b> is the emotion most likely to result in delinquency according to:</p>
+            <label><input type="radio" name="q4" value="a"> Agnew's General Strain Theory</label>
+            <label><input type="radio" name="q4" value="b"> Social Learning Theory</label></div>
+
+        <div class="question"><p>5. Which theory says places, not just people, can be conducive to crime?</p>
+            <label><input type="radio" name="q5" value="a"> Social Disorganization Theory</label>
+            <label><input type="radio" name="q5" value="b"> Social Learning Theory</label></div>
+
+        <div class="question"><p>6. <b>Imitation</b> is a concept in which theory?</p>
+            <label><input type="radio" name="q6" value="a"> Social Learning Theory</label>
+            <label><input type="radio" name="q6" value="b"> Social Disorganization Theory</label></div>
+
+        <div class="question"><p>7. True or False: Structural factors themselves (poverty, race) do not cause crime, but produce social disorganization which does.</p>
             <label><input type="radio" name="q7" value="true"> True</label>
             <label><input type="radio" name="q7" value="false"> False</label></div>
-        <div class="question"><p>8. What is the <b>most common</b> form of elder abuse?</p>
-            <label><input type="radio" name="q8" value="a"> Neglect</label>
-            <label><input type="radio" name="q8" value="b"> Physical Abuse</label></div>
-        <div class="question"><p>9. <b>SHINE</b> provides what service?</p>
-            <label><input type="radio" name="q9" value="a"> Health Insurance Needs</label>
-            <label><input type="radio" name="q9" value="b"> Financial Restitution</label></div>
-        <div class="question"><p>10. What percentage of the world will be elderly in 2050?</p>
-            <label><input type="radio" name="q10" value="a"> 25%</label>
-            <label><input type="radio" name="q10" value="b"> 50%</label></div>
-        <button type="button" onclick="checkFinal()">SUBMIT EXAM</button>
+
+        <div class="question"><p>8. <b>Differential Association</b> (pro-crime attachments) belongs to:</p>
+            <label><input type="radio" name="q8" value="a"> Social Learning Theory</label>
+            <label><input type="radio" name="q8" value="b"> General Strain Theory</label></div>
+
+        <div class="question"><p>9. <b>Negative Stimuli</b> (like losing a job) is a type of:</p>
+            <label><input type="radio" name="q9" value="a"> Strain</label>
+            <label><input type="radio" name="q9" value="b"> Imitation</label></div>
+
+        <div class="question"><p>10. Social disorganization _________ the relationship between structural characteristics and crime.</p>
+            <label><input type="radio" name="q10" value="a"> Mediates</label>
+            <label><input type="radio" name="q10" value="b"> Causes</label></div>
+
+        <!-- STATS & FLORIDA PROGRAMS (10 Qs) -->
+        <div class="question"><p>11. What % of violence involves people <b>known</b> to the victim?</p>
+            <label><input type="radio" name="q11" value="a"> 38%</label>
+            <label><input type="radio" name="q11" value="b"> 99%</label></div>
+
+        <div class="question"><p>12. What is the strongest protective factor for elder abuse?</p>
+            <label><input type="radio" name="q12" value="a"> Social Support</label>
+            <label><input type="radio" name="q12" value="b"> Financial Wealth</label></div>
+
+        <div class="question"><p>13. Elder abuse increased by what % during COVID-19?</p>
+            <label><input type="radio" name="q13" value="a"> 83%</label>
+            <label><input type="radio" name="q13" value="b"> 25%</label></div>
+
+        <div class="question"><p>14. What % of Sumter, FL is 65+?</p>
+            <label><input type="radio" name="q14" value="a"> 25%</label>
+            <label><input type="radio" name="q14" value="b"> 53%</label></div>
+
+        <div class="question"><p>15. <b>SHINE</b> helps elders with what?</p>
+            <label><input type="radio" name="q15" value="a"> Health Insurance Needs (Medicare/Medicaid)</label>
+            <label><input type="radio" name="q15" value="b"> Finding a Nursing Home</label></div>
+
+        <div class="question"><p>16. <b>HCE</b> provides how much monthly for home care?</p>
+            <label><input type="radio" name="q16" value="a"> $160</label>
+            <label><input type="radio" name="q16" value="b"> $841</label></div>
+
+        <div class="question"><p>17. <b>RELIEF</b> programming provides what to families?</p>
+            <label><input type="radio" name="q17" value="a"> Respite (Breaks) for caregivers</label>
+            <label><input type="radio" name="q17" value="b"> Financial advice</label></div>
+
+        <div class="question"><p>18. <b>CARES</b> is a screening tool for:</p>
+            <label><input type="radio" name="q18" value="a"> Nursing home applicants</label>
+            <label><input type="radio" name="q18" value="b"> Elder abuse investigations</label></div>
+
+        <div class="question"><p>19. By 2050, the elderly will account for what % of the world population?</p>
+            <label><input type="radio" name="q19" value="a"> 25%</label>
+            <label><input type="radio" name="q19" value="b"> 10%</label></div>
+
+        <div class="question"><p>20. <b>SSI</b> is a federal program for people with little income. True or False?</p>
+            <label><input type="radio" name="q20" value="true"> True</label>
+            <label><input type="radio" name="q20" value="false"> False</label></div>
+
+        <!-- LEGAL & DEFINITIONS (10 Qs) -->
+        <div class="question"><p>21. Does the legal definition of family violence include <b>roommates</b>?</p>
+            <label><input type="radio" name="q21" value="a"> Yes</label>
+            <label><input type="radio" name="q21" value="b"> No</label></div>
+
+        <div class="question"><p>22. <b>Guardianship</b> is court-ordered for what type of care?</p>
+            <label><input type="radio" name="q22" value="a"> Physical and Medical care</label>
+            <label><input type="radio" name="q22" value="b"> Financial and Personal decisions</label></div>
+
+        <div class="question"><p>23. <b>Conservatorship</b> is court-ordered for what type of care?</p>
+            <label><input type="radio" name="q23" value="a"> Physical and Medical care</label>
+            <label><input type="radio" name="q23" value="b"> Financial and Personal decisions</label></div>
+
+        <div class="question"><p>24. Relationship between race and elder abuse victimization operates through:</p>
+            <label><input type="radio" name="q24" value="a"> SES (Socio-Economic Status)</label>
+            <label><input type="radio" name="q24" value="b"> Ageism</label></div>
+
+        <div class="question"><p>25. <b>1st Degree Murder</b> requires Premeditation and __________.</p>
+            <label><input type="radio" name="q25" value="a"> Deliberation (Planning)</label>
+            <label><input type="radio" name="q25" value="b"> Malice</label></div>
+
+        <div class="question"><p>26. <b>Civil Court</b> burden is:</p>
+            <label><input type="radio" name="q26" value="a"> Probable Cause</label>
+            <label><input type="radio" name="q26" value="b"> Beyond a Reasonable Doubt</label></div>
+
+        <div class="question"><p>27. <b>Criminal Court</b> burden is:</p>
+            <label><input type="radio" name="q27" value="a"> Probable Cause</label>
+            <label><input type="radio" name="q27" value="b"> Beyond a Reasonable Doubt</label></div>
+
+        <div class="question"><p>28. <b>Homicide</b> is the specific legal category for criminal killings. True or False?</p>
+            <label><input type="radio" name="q28" value="true"> False (Homicide is ANY killing; Murder is the legal category)</label>
+            <label><input type="radio" name="q28" value="false"> True</label></div>
+
+        <div class="question"><p>29. <b>Reckless Manslaughter</b> means you recognized the harm but __________ it.</p>
+            <label><input type="radio" name="q29" value="a"> Disregarded</label>
+            <label><input type="radio" name="q29" value="b"> Didn't know about</label></div>
+
+        <div class="question"><p>30. A <b>Single Judge</b> hears cases and sets rulings in:</p>
+            <label><input type="radio" name="q30" value="a"> Family Court</label>
+            <label><input type="radio" name="q30" value="b"> Criminal Court</label></div>
+
+        <!-- ELDER ABUSE & BIOLOGY (10 Qs) -->
+        <div class="question"><p>31. <b>Neglect</b> is the most common form of abuse. True or False?</p>
+            <label><input type="radio" name="q31" value="true"> True</label>
+            <label><input type="radio" name="q31" value="false"> False</label></div>
+
+        <div class="question"><p>32. What hormone is produced during stress and impacts every organ?</p>
+            <label><input type="radio" name="q32" value="a"> Cortisol</label>
+            <label><input type="radio" name="q32" value="b"> Melatonin</label></div>
+
+        <div class="question"><p>33. Elder abuse can increase early death by what %?</p>
+            <label><input type="radio" name="q33" value="a"> 100%</label>
+            <label><input type="radio" name="q33" value="b"> 300%</label></div>
+
+        <div class="question"><p>34. Abuse experienced by ages <b>80+</b> is most often:</p>
+            <label><input type="radio" name="q34" value="a"> Neglect</label>
+            <label><input type="radio" name="q34" value="b"> Abandonment</label></div>
+
+        <div class="question"><p>35. <b>CGA</b> stands for what?</p>
+            <label><input type="radio" name="q35" value="a"> Comprehensive Geriatric Assessment</label>
+            <label><input type="radio" name="q35" value="b"> Caregiver Guidance Agency</label></div>
+
+        <div class="question"><p>36. Victims of maltreatment are ___ times more likely to be criminal later.</p>
+            <label><input type="radio" name="q36" value="a"> 5x</label>
+            <label><input type="radio" name="q36" value="b"> 9x</label></div>
+
+        <div class="question"><p>37. World Elder Abuse Awareness Day color?</p>
+            <label><input type="radio" name="q37" value="a"> Purple (June 15th)</label>
+            <label><input type="radio" name="q37" value="b"> Pink</label></div>
+
+        <div class="question"><p>38. <b>Ableism</b> is a risk factor for abuse. True or False?</p>
+            <label><input type="radio" name="q38" value="true"> True</label>
+            <label><input type="radio" name="q38" value="false"> False</label></div>
+
+        <div class="question"><p>39. <b>Self-Neglect</b> can result in involuntary care from APS. True or False?</p>
+            <label><input type="radio" name="q39" value="true"> True</label>
+            <label><input type="radio" name="q39" value="false"> False</label></div>
+
+        <div class="question"><p>40. Professional caregivers commit abuse because facilities are __________.</p>
+            <label><input type="radio" name="q40" value="a"> Understaffed/Underpaid</label>
+            <label><input type="radio" name="q40" value="b"> Overfunded</label></div>
+
+        <!-- SOCIAL PSYCH (10 Qs) -->
+        <div class="question"><p>41. Creating an excuse for failing <b>before</b> you try is:</p>
+            <label><input type="radio" name="q41" value="a"> Self-Handicapping</label>
+            <label><input type="radio" name="q41" value="b"> Self-Awareness</label></div>
+
+        <div class="question"><p>42. Comparing actual behavior to internal values is:</p>
+            <label><input type="radio" name="q42" value="a"> Self-Awareness Theory</label>
+            <label><input type="radio" name="q42" value="b"> Social Learning Theory</label></div>
+
+        <div class="question"><p>43. Mislabeling heart-racing as attraction instead of fear is:</p>
+            <label><input type="radio" name="q43" value="a"> Misattribution of Arousal</label>
+            <label><input type="radio" name="q43" value="b"> Behavioral Handicapping</label></div>
+
+        <div class="question"><p>44. In the Bridge Study, the **Scary Bridge** caused more phone calls. True or False?</p>
+            <label><input type="radio" name="q44" value="true"> True</label>
+            <label><input type="radio" name="q44" value="false"> False</label></div>
+
+        <div class="question"><p>45. <b>Reported</b> handicapping uses actions like drinking before a test. True or False?</p>
+            <label><input type="radio" name="q45" value="false"> False (Actions = Behavioral; Words = Reported)</label>
+            <label><input type="radio" name="q45" value="true"> True</label></div>
+
+        <div class="question"><p>46. A "Con" of self-awareness is **Negative Emotions** or **Escapism**. True or False?</p>
+            <label><input type="radio" name="q46" value="true"> True</label>
+            <label><input type="radio" name="q46" value="false"> False</label></div>
+
+        <div class="question"><p>47. <b>Spotlight Effect</b> means feeling like everyone is judging you. True or False?</p>
+            <label><input type="radio" name="q47" value="true"> True</label>
+            <label><input type="radio" name="q47" value="false"> False</label></div>
+
+        <div class="question"><p>48. If a mirror is in a room, people are ________ likely to cheat.</p>
+            <label><input type="radio" name="q48" value="a"> Less</label>
+            <label><input type="radio" name="q48" value="b"> More</label></div>
+
+        <div class="question"><p>49. <b>Self-esteem</b> is what we are trying to protect when we self-handicap. True or False?</p>
+            <label><input type="radio" name="q49" value="true"> True</label>
+            <label><input type="radio" name="q49" value="false"> False</label></div>
+
+        <div class="question"><p>50. The "Label" in the bridge study was correctly applied. True or False?</p>
+            <label><input type="radio" name="q50" value="false"> False (It was MIS-labeled)</label>
+            <label><input type="radio" name="q50" value="true"> True</label></div>
+
+        <button type="button" onclick="checkFifty()">SUBMIT FULL EXAM</button>
     </form>
+
     <div id="results"></div>
+
     <script>
-        function checkFinal() {
-            const a = {q1:'c',q2:'a',q3:'a',q4:'a',q5:'a',q6:'a',q7:'true',q8:'a',q9:'a',q10:'a'};
-            let s=0; const f=document.getElementById('finalForm');
+        function checkFifty() {
+            const a = {
+                q1:'c',q2:'a',q3:'a',q4:'a',q5:'a',q6:'a',q7:'true',q8:'a',q9:'a',q10:'a',
+                q11:'b',q12:'a',q13:'a',q14:'b',q15:'a',q16:'a',q17:'a',q18:'a',q19:'a',q20:'true',
+                q21:'a',q22:'a',q23:'b',q24:'a',q25:'a',q26:'a',q27:'b',q28:'true',q29:'a',q30:'a',
+                q31:'true',q32:'a',q33:'b',q34:'a',q35:'a',q36:'b',q37:'a',q38:'true',q39:'true',q40:'a',
+                q41:'a',q42:'a',q43:'a',q44:'true',q45:'false',q46:'true',q47:'true',q48:'a',q49:'true',q50:'false'
+            };
+            let s=0; const f=document.getElementById('fiftyForm');
             for(let q in a){ if(f.elements[q].value===a[q])s++; }
             const r=document.getElementById('results');
-            r.innerHTML="<h2>Score: "+s+"/10</h2><p>"+(s>=9?"You're ready! Go Noles! 🍢":"Review the guide and try again!")+"</p>";
+            r.innerHTML="<div style='font-size: 2em;'>Score: "+s+"/50 ("+(s*2)+"%)</div>";
+            r.innerHTML+="<p>"+(s>=45?"🍢 FSU LEGEND! You are ready!":"Keep studying the Guide—you're almost there!")+"</p>";
             r.style.display='block'; window.scrollTo(0, document.body.scrollHeight);
         }
     </script>
