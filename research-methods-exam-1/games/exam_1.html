@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CCJ 4700 Research Methods - Exam 1</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; max-width: 800px; margin: auto; }
+        .question { background: #1e1e1e; padding: 20px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #78243c; }
+        label { display: block; padding: 10px; margin: 5px 0; background: #2a2a2a; border-radius: 5px; cursor: pointer; }
+        label:hover { background: #3a3a3a; }
+        button { background: #78243c; color: #ceb888; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; }
+        #results { margin-top: 30px; padding: 20px; border-radius: 10px; display: none; background: #333; border: 2px solid #ceb888; }
+    </style>
+</head>
+<body>
+    <h1 style="color:#ceb888">🍢 CCJ 4700 Practice Exam 1</h1>
+    <form id="researchForm">
+        <div class="question">
+            <p>1. Believing something is true because "it's the way it's always been" is which way of knowing?</p>
+            <label><input type="radio" name="q1" value="a"> Authority</label>
+            <label><input type="radio" name="q1" value="b"> Tradition</label>
+            <label><input type="radio" name="q1" value="c"> Scientific Approach</label>
+        </div>
+        <div class="question">
+            <p>2. Research that aims to explain **WHY** something happens is called:</p>
+            <label><input type="radio" name="q2" value="a"> Exploration</label>
+            <label><input type="radio" name="q2" value="b"> Description</label>
+            <label><input type="radio" name="q2" value="c"> Explanation</label>
+        </div>
+        <div class="question">
+            <p>3. In research, the **DEPENDENT** variable is the:</p>
+            <label><input type="radio" name="q3" value="a"> Cause</label>
+            <label><input type="radio" name="q3" value="b"> Effect / Result</label>
+        </div>
+        <div class="question">
+            <p>4. If 'Gender' is the variable, 'Male' and 'Female' are the:</p>
+            <label><input type="radio" name="q4" value="a"> Hypotheses</label>
+            <label><input type="radio" name="q4" value="b"> Attributes</label>
+        </div>
+        <div class="question">
+            <p>5. Evaluation research (seeing if a program works) falls under which purpose?</p>
+            <label><input type="radio" name="q5" value="a"> Applied Research</label>
+            <label><input type="radio" name="q5" value="b"> Description</label>
+        </div>
+        <button type="button" onclick="checkQuiz()">Submit Exam</button>
+    </form>
+    <div id="results"></div>
+    <script>
+        function checkQuiz() {
+            const a = {q1:'b',q2:'c',q3:'b',q4:'b',q5:'a'};
+            let s=0; const f=document.getElementById('researchForm');
+            for(let q in a){ if(f.elements[q].value===a[q])s++; }
+            const r=document.getElementById('results');
+            r.innerHTML="<h2>Score: "+s+"/5</h2><p>"+(s===5?"You crushed it! 🍢":"Keep studying the PDF!")+"</p>";
+            r.style.display='block'; window.scrollTo(0, document.body.scrollHeight);
+        }
+    </script>
+</body>
+</html>
