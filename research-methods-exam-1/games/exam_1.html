@@ -1,57 +1,135 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CCJ 4700 Research Methods - Exam 1</title>
+    <title>CCJ 4700 Research Methods - Practice Exam 1</title>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; max-width: 800px; margin: auto; }
-        .question { background: #1e1e1e; padding: 20px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #78243c; }
-        label { display: block; padding: 10px; margin: 5px 0; background: #2a2a2a; border-radius: 5px; cursor: pointer; }
+        body { font-family: sans-serif; background: #121212; color: white; padding: 20px; max-width: 850px; margin: auto; line-height: 1.6; }
+        .header { background: #78243c; color: #ceb888; padding: 30px; border-radius: 15px; text-align: center; border-bottom: 5px solid #ceb888; margin-bottom: 30px; }
+        .question { background: #1e1e1e; padding: 20px; margin-bottom: 20px; border-radius: 12px; border: 1px solid #444; }
+        label { display: block; padding: 12px; margin: 8px 0; background: #2a2a2a; border-radius: 8px; cursor: pointer; transition: 0.2s; }
         label:hover { background: #3a3a3a; }
-        button { background: #78243c; color: #ceb888; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; }
-        #results { margin-top: 30px; padding: 20px; border-radius: 10px; display: none; background: #333; border: 2px solid #ceb888; }
+        input[type="radio"] { margin-right: 12px; }
+        button { background: #ceb888; color: #78243c; border: none; padding: 20px; border-radius: 8px; cursor: pointer; font-size: 20px; width: 100%; font-weight: bold; margin-top: 20px; }
+        #results { margin-top: 30px; padding: 20px; border-radius: 12px; display: none; background: #222; border: 2px solid #ceb888; }
+        .correct { color: #2ecc71; font-weight: bold; }
+        .incorrect { color: #e74c3c; font-weight: bold; }
+        .feedback { color: #aaa; font-style: italic; margin-bottom: 15px; border-left: 2px solid #ceb888; padding-left: 10px; }
     </style>
 </head>
 <body>
-    <h1 style="color:#ceb888">🍢 CCJ 4700 Practice Exam 1</h1>
+    <div class="header">
+        <h1>🍢 CCJ 4700: RESEARCH METHODS 🍢</h1>
+        <p>Exam 1 Practice Test (Ch. 1 & 2)</p>
+    </div>
+
     <form id="researchForm">
         <div class="question">
-            <p>1. Believing something is true because "it's the way it's always been" is which way of knowing?</p>
-            <label><input type="radio" name="q1" value="a"> Authority</label>
-            <label><input type="radio" name="q1" value="b"> Tradition</label>
-            <label><input type="radio" name="q1" value="c"> Scientific Approach</label>
+            <p>1. If you believe a fact because a famous professor or high-ranking official said it, which way of knowing is this?</p>
+            <label><input type="radio" name="q1" value="a"> Tradition</label>
+            <label><input type="radio" name="q1" value="b"> Authority</label>
+            <label><input type="radio" name="q1" value="c"> Personal Experience</label>
         </div>
+
         <div class="question">
-            <p>2. Research that aims to explain **WHY** something happens is called:</p>
-            <label><input type="radio" name="q2" value="a"> Exploration</label>
-            <label><input type="radio" name="q2" value="b"> Description</label>
-            <label><input type="radio" name="q2" value="c"> Explanation</label>
+            <p>2. Knowledge based on what we can actually observe and measure is called ________ knowledge.</p>
+            <label><input type="radio" name="q2" value="a"> Traditional</label>
+            <label><input type="radio" name="q2" value="b"> Empirical</label>
+            <label><input type="radio" name="q2" value="c"> Authority-based</label>
         </div>
+
         <div class="question">
-            <p>3. In research, the **DEPENDENT** variable is the:</p>
-            <label><input type="radio" name="q3" value="a"> Cause</label>
-            <label><input type="radio" name="q3" value="b"> Effect / Result</label>
+            <p>3. A researcher is studying a brand new type of cybercrime that no one has written about before. This purpose of research is:</p>
+            <label><input type="radio" name="q3" value="a"> Exploration</label>
+            <label><input type="radio" name="q3" value="b"> Description</label>
+            <label><input type="radio" name="q3" value="c"> Explanation</label>
         </div>
+
         <div class="question">
-            <p>4. If 'Gender' is the variable, 'Male' and 'Female' are the:</p>
-            <label><input type="radio" name="q4" value="a"> Hypotheses</label>
-            <label><input type="radio" name="q4" value="b"> Attributes</label>
+            <p>4. Reporting that "The recidivism rate for this program is 22%" is an example of which research purpose?</p>
+            <label><input type="radio" name="q4" value="a"> Explanation</label>
+            <label><input type="radio" name="q4" value="b"> Description</label>
+            <label><input type="radio" name="q4" value="c"> Exploration</label>
         </div>
+
         <div class="question">
-            <p>5. Evaluation research (seeing if a program works) falls under which purpose?</p>
-            <label><input type="radio" name="q5" value="a"> Applied Research</label>
-            <label><input type="radio" name="q5" value="b"> Description</label>
+            <p>5. Evaluation research (like checking if a new D.A.R.E. program works) is a type of ________ research.</p>
+            <label><input type="radio" name="q5" value="a"> Applied</label>
+            <label><input type="radio" name="q5" value="b"> Theoretical</label>
+            <label><input type="radio" name="q5" value="c"> Exploratory</label>
         </div>
-        <button type="button" onclick="checkQuiz()">Submit Exam</button>
+
+        <div class="question">
+            <p>6. A ________ is a specific, testable expectation about empirical reality.</p>
+            <label><input type="radio" name="q6" value="a"> Theory</label>
+            <label><input type="radio" name="q6" value="b"> Hypothesis</label>
+            <label><input type="radio" name="q6" value="c"> Variable</label>
+        </div>
+
+        <div class="question">
+            <p>7. In a study on how study time affects grades, **Grades** are the:</p>
+            <label><input type="radio" name="q7" value="a"> Independent Variable (Cause)</label>
+            <label><input type="radio" name="q7" value="b"> Dependent Variable (Effect)</label>
+        </div>
+
+        <div class="question">
+            <p>8. If 'Race' is a variable, 'White', 'Black', and 'Hispanic' are the:</p>
+            <label><input type="radio" name="q8" value="a"> Variables</label>
+            <label><input type="radio" name="q8" value="b"> Attributes</label>
+        </div>
+
+        <div class="question">
+            <p>9. A variable that is held constant to ensure the results are accurate is a ________ variable.</p>
+            <label><input type="radio" name="q9" value="a"> Control</label>
+            <label><input type="radio" name="q9" value="b"> Independent</label>
+            <label><input type="radio" name="q9" value="c"> Dependent</label>
+        </div>
+
+        <div class="question">
+            <p>10. True or False: Theory and research are separate and do not influence each other.</p>
+            <label><input type="radio" name="q10" value="t"> True</label>
+            <label><input type="radio" name="q10" value="f"> False</label>
+        </div>
+
+        <button type="button" onclick="checkResearchQuiz()">🍢 SUBMIT RESEARCH TEST 🍢</button>
     </form>
+
     <div id="results"></div>
+
     <script>
-        function checkQuiz() {
-            const a = {q1:'b',q2:'c',q3:'b',q4:'b',q5:'a'};
-            let s=0; const f=document.getElementById('researchForm');
-            for(let q in a){ if(f.elements[q].value===a[q])s++; }
-            const r=document.getElementById('results');
-            r.innerHTML="<h2>Score: "+s+"/5</h2><p>"+(s===5?"You crushed it! 🍢":"Keep studying the PDF!")+"</p>";
-            r.style.display='block'; window.scrollTo(0, document.body.scrollHeight);
+        function checkResearchQuiz() {
+            const answers = { q1: 'b', q2: 'b', q3: 'a', q4: 'b', q5: 'a', q6: 'b', q7: 'b', q8: 'b', q9: 'a', q10: 'f' };
+            const feedback = {
+                q1: "Authority = Believing an expert or boss.",
+                q2: "Empirical = Observe and measure.",
+                q3: "Exploration = New topics.",
+                q4: "Description = Describing 'what' (the scope).",
+                q5: "Applied = Solving problems / Evaluation.",
+                q6: "Hypothesis = Testable expectation.",
+                q7: "Dependent Variable = The Result (Grades).",
+                q8: "Attributes = The choices/categories inside a variable.",
+                q9: "Control = Keeping it constant.",
+                q10: "False! Theory and research are a cycle—they always work together."
+            };
+            
+            let score = 0;
+            const form = document.getElementById('researchForm');
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h2>🍢 RESULTS 🍢</h2>';
+
+            for (let q in answers) {
+                const selected = form.elements[q].value;
+                if (selected === answers[q]) {
+                    score++;
+                    resultsDiv.innerHTML += `<p class="correct">Q${q.slice(1)}: Correct!</p>`;
+                } else {
+                    resultsDiv.innerHTML += `<p class="incorrect">Q${q.slice(1)}: Incorrect.</p>`;
+                }
+                resultsDiv.innerHTML += `<p class="feedback">${feedback[q]}</p>`;
+            }
+
+            resultsDiv.innerHTML += `<h3>Final Score: ${score}/10</h3>`;
+            resultsDiv.style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
         }
     </script>
 </body>
